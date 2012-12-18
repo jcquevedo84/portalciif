@@ -1,0 +1,519 @@
+<?php
+	/**
+	*nombreaplicacion indexV
+	*
+	*Clase Vista de la Pagina index.php
+	*En esta clase se encuentran todas las interfaces de la pagina index.php
+	*@copyright Instituo de Ingenieria CPDI
+	*@author Juan Carlos Rodriguez
+	*@version 1.0
+	*@package indexV
+	*
+	*/
+	class indexV extends comun 
+	{
+		
+		/**
+		* string que guarda la dirección de las imagenes que se utilizaran en  index.php.
+		* @var string $dirImagenes
+		* @access public
+		*/
+		var $dirImagenes="";
+		/**
+		* string que guarda el nombre del dev de contenido  de la pagina index.php.
+		* @var string $divCont
+		* @access public
+		*/
+		var $divCont="";
+		/**
+		* string que guarda el nombre de la pagina que seguira luego del evento.
+		* @var string $paginaSiguiente
+		* @access public
+		*/
+		var $paginaSiguiente="";
+		/**
+		* string que guarda el nombre de las pagina .
+		* @var string $pagina
+		* @access public
+		*/
+		var $objError="";
+		var $pagina="";
+		var $opcion=array('inicio'=>array(
+						  0=>array('nombre'=>'Empresas','id'=>'0','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  1=>array('nombre'=>'UPS','id'=>'1','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,1,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,1,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  2=>array('nombre'=>'Comercio','id'=>'2','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,2,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,2,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  3=>array('nombre'=>'Concepto','id'=>'3','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,3,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,3,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  4=>array('nombre'=>'Presentación','id'=>'4','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,4,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,4,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  5=>array('nombre'=>'Productores','id'=>'5','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,5,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,5,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  6=>array('nombre'=>'Producto','id'=>'6','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,6,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,6,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  7=>array('nombre'=>'Operación','id'=>'7','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,7,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,7,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  8=>array('nombre'=>'Junta Directiva','id'=>'8','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,8,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,8,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  9=>array('nombre'=>'Enlaces Estategicos','id'=>'9','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,9,1);','nombre'=>'Crear'),
+																							 1=>array('eventoJS'=>'xajax_controladora(1,9,2);','nombre'=>'Gestionar')
+																							)
+									)
+						),
+	'adminuser'=>array(
+						  10=>array('nombre'=>'Usuario','id'=>'0','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,10,1);','nombre'=>'Crear Usuario'),
+																					1=>array('eventoJS'=>'xajax_controladora(1,10,2);','nombre'=>'Gestionar Usuario')
+																							)
+									)
+						
+					  ),
+	'reportes'=>array(
+						  11=>array('nombre'=>'Reportes','id'=>'0','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Reporte 1'),
+																					1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Reporte 2')
+																							)
+									)
+						
+					  ),
+	'miperfil'=>array(
+						  12=>array('nombre'=>'Información Personal','id'=>'infopersonal','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();'))),
+						  13=>array('nombre'=>'Actualizar','id'=>'actualizar','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();'))),
+						  14=>array('nombre'=>'Cambiar contraseña','id'=>'cambiarpass','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();')))
+					  ),
+	'regisem'=>array(
+						15=>array('nombre'=>'Información Personal','id'=>'0','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();'))),  
+						16=>array('nombre'=>'Capacidad Operativa','id'=>'1','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						  17=>array('nombre'=>'Capacidad Instalada','id'=>'2','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						18=>array('nombre'=>'Capacidad Almacenada','id'=>'3','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						19=>array('nombre'=>'Materia Prima','id'=>'4','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						20=>array('nombre'=>'Precios','id'=>'5','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						21=>array('nombre'=>'Colocación de la Producción','id'=>'6','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						22=>array('nombre'=>'Recaudaciones','id'=>'7','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						23=>array('nombre'=>'Cuentas por Cobrar','id'=>'8','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						24=>array('nombre'=>'Inventario','id'=>'9','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						25=>array('nombre'=>'Gestion Social','id'=>'10','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						26=>array('nombre'=>'Beneficiarioa','id'=>'11','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						27=>array('nombre'=>'Costo de Producción','id'=>'12','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						28=>array('nombre'=>'Producción','id'=>'13','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						29=>array('nombre'=>'Insidencias','id'=>'14','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									),
+						30=>array('nombre'=>'Empleos Generados','id'=>'15','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora(1,0,1);','nombre'=>'Registrar'),
+																					            1=>array('eventoJS'=>'xajax_controladora(1,0,2);','nombre'=>'Gestionar')
+																							)
+									)
+					  ),
+	'control'=>array(
+						31=>array('nombre'=>'Monitoreo','id'=>'infopersonal','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();'))),
+						32=>array('nombre'=>'Consulta','id'=>'infopersonal','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();'))),
+						33=>array('nombre'=>'Modificación','id'=>'infopersonal','subopcion'=>array(0=>array('eventoJS'=>'xajax_controladora();')))
+						
+					  )			
+						  );	
+		/*var	$action=array(0 =>array(0=>array('nomImg'=>'modificar15x15.png','eventoJs'=>"onclick=\"xajax_verdetalleorden();\"","alt"=>"ver detalles"),
+			 						1=>array('nomImg'=>'print.png','eventoJs'=>"onclick=\"printPage();\"","alt"=>"imprimir"),
+						  			2=>array('nomImg'=>'eliminar15x15.png','eventoJs'=>"onclick=\"if(confirm('¿ Desea Eliminar la Orden ?')){xajax_eliminarorden()};\"","alt"=>"eliminar"),
+						  			3=>array('nomImg'=>'accion15x15.png','eventoJs'=>"onclick=\"xajax_tomarAccion();\"","alt"=>"acci&oacute;n")
+						  		   )				 
+						  );*/					
+								
+								
+								
+			
+		
+		/**
+		*
+		*Constructor
+		*
+		*Esta Función asigna parametros a las variables miembros de la clase.
+		*
+		*@param string $dirImagenes es la dirección donde se encuentran las imagenes de la aplicación.
+		*@param string $divCont es id de el div donde se colocara todo el contenido de la pagina.
+		*@return void
+		*/
+		function indexV($dirImagenes="",$divCont="",$paginas="")
+		{		
+			if(!empty($dirImagenes))
+			{
+				$this->dirImagenes=$dirImagenes;
+			}
+			else
+			{
+				$this->dirImagenes=varConf::getRutasAccesoImagen("imagenes");
+			}
+			if(!empty($divCont))
+			{
+				$this->divCont=$divCont;
+			}
+			else
+			{
+				$this->divCont=varConf::getAtributosPag(substr(__CLASS__, 0, -1),"divContenido");
+			}
+			if(!empty($paginas))
+			{
+				$this->pagina=$paginas;
+			}
+			else
+			{
+				$this->pagina=varConf::getPaginas();
+			}
+	   		comun::comun($this->dirImagenes,$this->pagina);
+		}
+		/**
+		*
+		*setPaginaSig
+		*
+		*Descripsión
+		*
+		*@param tipo $nomvar Descripción
+		*@return tipo $nomvar Descripción
+		*/
+		function setPaginaSig($valor="")
+		{
+			$this->paginaSiguiente=$valor;	
+		}
+		/**
+		*
+		*desplegarRegionEditable
+		*
+		*Esta funcióndevuelve el  cogido html de la región editable
+		*
+		*@param tipo $htmll es el codigo html que se colocará en la región editable
+		*@return tipo $html Devuelve el Html en la región editable
+		*/
+		function desplegarRegionEditable($htmll="")
+		{
+
+			$html="";
+			$html="<table id=\"tblpagina\" class=\"tblpagina\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"400px\" width=\"100%\">
+					<tr id=\"panel_cen\" class=\"trpanel_cen\">
+						<td align=\"center\">".$htmll."</td>
+					</tr>     
+					</table>";
+			return $html;	
+		}
+		/**
+		*
+		*abrirPanelCentral
+		*
+		*Esta función se le asigna un cogido html a la región editable
+		*
+		*@param tipo $regionEditable es el codigo html que se colocará en la región editable
+		*@return tipo $html Devuelve el Html en la región central
+		*/
+		function abrirPanelCentral($regionEditable="")
+    	{
+
+    		$html="";
+       		$html.="
+       		<table id=\"tblpagina\" class=\"tblpagina\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"> 
+				<!-- Panel Central -->
+				<tr id=\"panel_cen\" class=\"trpanel_cen\">
+					<td>
+						<table id=\"panel_cen\" class=\"tblpanel_cen\" cellpadding=\"0\" cellspacing=\"0\">
+							<tr>
+								<td class=\"tdeditable2 bordecelda\" align=\"center\">
+									<!-- Región de Contenido -->
+									<table id=\"region_editable\" class=\"tblregion_editable2 bordecelda\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+											 	<tr height=\"20px\" valign=\"top\">
+													<td>
+														<table height=\"20\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+											 				<tr class=\"trbanner_inf\">
+																<td class=\"esquinas\"><img src=\"".$this->dirImagenes."sup_izq2.png\" /></td>
+																<td class=\"barra_cen3\" valign=\"middle\"><b style=\"font-size:11px; color:#0000CC\">".$bienvenida."</b></td>
+																<td class=\"esquinas\"><img src=\"".$this->dirImagenes."sup_der2.png\" /></td>
+															</tr>
+											 			</table>
+													</td>
+												</tr>
+												<tr valign=\"top\">
+													<td class=\"tdbordefino\">
+														<div id=\"detalle_index\">".$regionEditable."</div>
+													</td>
+												</tr>
+											</table>
+											<!-- fin Región de Contenido -->
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						</table>
+						<!-- fin Panel Central -->
+    		";
+			return $html;
+	    }
+	    /**
+		*
+		*login
+		*
+		*Esta función devuelve el  cdigo html del 
+		*
+		*@return tipo $html Devuelve el Html en la región del autenticación
+		*/
+	    function login()
+	    {
+	    	$html="";
+	    	$html="
+	    			<table id=\"tbllogin\" class=\"arealogin\" cellpadding=\"1\">
+					<tr>
+						<td>
+							<div id=\"areadeacceso\">
+								<form id=\"entrarSistema\" name=\"entrarSistema\" method=\"post\" action=\"".$this->pagina[index]."\">
+									<table style=\"font-size:10px\">
+										<tr>
+											<td align=\"right\">
+												<b>Usuario:</b>
+											</td>
+											<td>
+												<input type=\"text\" id=\"usuario\" name=\"txtusuario\" size=\"18\" maxlength=\"20\">
+											</td>
+										</tr>
+										<tr>
+											<td align=\"right\">
+												<b>Contrase&ntilde;a:</b>
+											</td>
+											<td>
+												<input type=\"password\" id=\"pass\" name=\"txtpass\" size=\"18\" maxlength=\"10\">
+											</td>
+										</tr>
+										<tr>
+											<td align=\"right\">
+												<input type=\"button\" id=\"entrar\" name=\"entrar\" value=\"Entrar\" onclick=\"xajax_consultarLogin(document.getElementById('usuario').value, document.getElementById('pass').value);\" />
+											</td>
+											<td>
+												<!--<a class=\"aenlace\" href=\"".$this->pagina[registroSolicitante]."\">Registrarse</a>&nbsp;&nbsp;&nbsp;<a class=\"aenlace\" href=\"../documentos/registro/demo_registro.html\" target=\"_blank\">Ver Demo</a><br>-->
+												<a class=\"aenlace\" href=\"#\" onclick=\"xajax_recordarPass();\" style=\"line-height:150%\">&iquest;Olvid&oacute; su contrase&ntilde;a?</a>
+											</td>
+										</tr>
+										<tr>
+											<td colspan=\"2\" align=\"center\">
+												<span id=\"msg_entrar\" style=\"background-color:#ffffcc; color:#e20a16;font-weight:bold; display:block\"></span>
+											</td>
+										</tr>	
+									</table>
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
+	    	";	
+	    	return $html;
+	    }
+	     /**
+		*
+		*login
+		*
+		*Esta función devuelve el  cdigo html de  la pantalla principal cuando se entra al sistema
+		*
+		*@param tipo $tipousuario es tipo de usuario de la aplicación
+		*@return tipo $html Devuelve el Html en la pantalla principal cuando se entra al sistema
+		*/
+	    function principal($tipousuario="coo")
+    	{
+    		$html = "";
+    		$html.= "
+				<!-- tabla general -->
+				<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<!-- area izquierda -->
+									<td width=\"200px\" style=\"background-color:#f5f5f5; border-color:#b3cce6; border-style:solid; border-width:1px; vertical-align:top\" >
+										<div id=\"div_menuLateral\" style=\"font-size:11px\">
+											<div id=\"div_opcionesPrincipal\" style=\"display:block\">
+												".$this->opcionesAdmon($this->opcion['inicio'], $tipousuario)."
+											</div>
+										</div>
+									</td>
+							
+									<!-- area derecha -->
+									<td width=\"685px\" style=\"background-color:#ffffff;height:420px; border-color:#b3cce6; border-style:solid; border-width:1px; padding:2px; vertical-align:top\">
+										<div id=\"contenido\" style=\"font-size:12px\">
+											<div id=\"titulo_contenido\" style=\"font-size:14px; font-weight:bold; color:#006699; margin-bottom:10px\">
+												Titulo contenido
+											</div>
+											<div id=\"detalles_contenido\" style=\"display:block\" class=\"scroll2\">
+											
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td width=\"895px\" align=\"right\">
+							<div id=\"div_menuPrincipal\" style=\"background-image:url(../imagenes/fondomenu1.png); background-repeat:repeat-x\">
+								".$this->menuPrincipal(11,$tipousuario)."
+							</div>
+						</td>
+					</tr>
+				</table>						
+    		";
+    		return $html;	
+    	}
+    	/**
+		*
+		*gestionar
+		*
+		*Pinta la lista de registro con las opciones de modificar, ver y activar/desactivar
+		*
+		*@param array $campos Son los titulos de cada una de las celdas
+		*@param array $datoConsulta Son los registro 
+		*@param array $action Son las acciones por cada registro
+		*@return tipo $html El codigo HTML de la lista de registro con las opciones de modificar, ver y activar/desactivar
+		*/
+		function gestionar($campos="",$datoConsulta="",$action="")
+		{
+			$html = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"2\" style=\"font-size:10px\" width=\"100%\">
+					<tr bgcolor=\"#6699cc\" style=\"color:#ffffff; font-weight:bold; font-size:11px\">";
+			$html.="
+					<td align=\"center\">
+						No
+					</td>
+			";
+			$cou=count($campos);
+			if(!empty($campos)){
+			foreach ($campos as $cmp)
+			{
+				$anexo="";
+				if($cmp['Ord']==1)
+				{
+					$anexo="onclick=\"xajax_cambiarorden(document.getElementById('hid_".$cmp['id']."').id, document.getElementById('hid_".$cmp['id']."').value, document.getElementById('flecha_".$cmp['id']."').id, 'modificarProducto')\"";
+				}
+				$html.="
+					<td align=\"center\">
+						<span id=\"".$cmp['id']."\" style=\"cursor:pointer\" ".$anexo." >".htmlentities($cmp['nombre'])."<span id=\"flecha_".$cmp['id']."\"></span><input type=\"hidden\" name =\"hid_".$cmp['id']."\" id=\"hid_".$cmp['id']."\" value=\"DESC\"/></span>
+					</td>
+				";
+			}}
+			$html.="</tr>";
+			//print_r($datoConsulta);
+			if(!empty($datoConsulta))
+			{
+				//var_dump($datoConsulta);
+				$contador = 0;
+				foreach ($datoConsulta as $columna)	
+				{
+					$contador++;
+					if ($contador % 2 == 0) {
+						$colorCelda = "#dcdcdc";
+					} else $colorCelda = "#ffffff";
+					
+					$html.= "<tr bgcolor=\"".$colorCelda."\" style=\"font-size:10px\">";
+					$html.="
+						<td align=\"center\">
+							<b>".$contador."</b>
+						</td>
+					";
+					for ($i=2;$i<=$cou;$i++)
+					{
+						$valor = "";
+						$nuevoEstado = "";
+						$valor = htmlentities($columna[$i],ENT_QUOTES,'UTF-8');
+						//$valor = htmlentities($columna[$i]);
+						if($valor == "t")
+						{
+							$valor = "<span style=\"color:#99cc00\"><b>habilitado</b></span>";
+							$nuevoEstado = 0;
+						}
+						elseif( $valor == "f" )
+						{
+							$valor = "<span style=\"color:#e20a16\"><b>deshabilitado</b></span>";
+							$nuevoEstado = 1;
+						}
+						$html.= "
+									<td align=\"center\">
+										".$valor."
+									</td>
+						";
+					}
+					$html.="<td align=\"center\">";
+					if(!empty($action))
+					{
+
+						$a="'".$columna[1]."'";
+						$html.="<img src=\"".$this->dirImagenes."".$action[0]['nomImg']."\" ".str_replace("(","(4,$a,",$action[0]['eventoJs'])." alt=\"".$action[0]['alt']."\" style=\"cursor:pointer\"/>";
+						if($nuevoEstado == 0)
+						{
+							$html.="<img src=\"".$this->dirImagenes."".$action[1]['nomImg']."\" ".str_replace("a(","a(5,$a,",$action[1]['eventoJs'])." alt=\"".$action[1]['alt']."\" style=\"cursor:pointer\"/>";
+						}
+						elseif($nuevoEstado == 1)
+						{
+							$html.="<img src=\"".$this->dirImagenes."".$action[2]['nomImg']."\" ".str_replace("a(","a(5,$a,",$action[2]['eventoJs'])." alt=\"".$action[2]['alt']."\" style=\"cursor:pointer\"/>";
+						}
+						$html.="<img src=\"".$this->dirImagenes."".$action[3]['nomImg']."\" ".str_replace("(","(4,$a,",$action[3]['eventoJs'])." alt=\"".$action[3]['alt']."\" style=\"cursor:pointer\"/>";
+					}
+					$html.="</td>
+							</tr>";
+				}
+			}
+					
+			$html .= "
+				</table>
+			";
+			return $html;
+		}
+	}
+?>

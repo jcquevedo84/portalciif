@@ -1,0 +1,343 @@
+function resaltarSpan(id,x)
+{
+	//alert(id);
+	if(x == '1')
+	{
+		document.getElementById(id).style.cursor = "pointer";
+		document.getElementById(id).style.fontSize = "12px";
+		document.getElementById(id).style.color = "#0000CC";
+	}else
+	{
+		document.getElementById(id).style.cursor = "default";
+		document.getElementById(id).style.fontSize = "11px";
+		document.getElementById(id).style.color = "#666666";
+	}
+}
+
+function opcionDireccion(valor)
+{
+	//alert(valor);
+	switch(valor)
+	{
+		case "si":
+			document.getElementById('divRegistrarDireccionDepartamento').style.display = "none";
+			break;
+		case "no":
+			document.getElementById('divRegistrarDireccionDepartamento').style.display = "block";
+			break;
+	}
+}
+function usuarioVer(valor, opcion, div)
+{
+	//alert("valor: " + valor);
+	//alert("opcion: " + opcion);
+	//alert("div: " + div);
+	
+	ajaxVerUsuario = nuevoAjax();
+	ajaxVerUsuario.open("GET", "../class/bd/consultasBD.php?seleccionado=" + valor + "&opfuncion=" + opcion, true);
+	ajaxVerUsuario.onreadystatechange = function() 
+	{ 
+		if (ajaxVerUsuario.readyState == 4 && ajaxVerUsuario.status == 200)
+		{ 
+			//alert(ajaxVerInst.responseText);
+			document.getElementById('divVerUsuario').style.display = "block";
+			document.getElementById(div).innerHTML = ajaxVerUsuario.responseText;
+		}
+	}
+	ajaxVerUsuario.send(null);
+}
+function cerrarmenus(id)
+{
+	//alert(id);
+	var x;
+	var listamenus = new Array("div_solestado", "div_solproducto", "div_solproducto_term", "div_solproducto_lpais", "div_solinstitucion", "div_solorigen", "div_solusuario", "div_soloperador", "div_ordestado", "div_ordproducto", "div_ordproducto_term", "div_ordproducto_lpais", "div_ordinstitucion", "div_ordorigen", "div_ordusuario", "div_ordoperador", "div_misordenes", "div_mistareas", "div_tareas", "div_productos", "div_operadores", "div_usuarios", "div_tareasproducto", "div_infopersonal", "div_actualizar", "div_cambiarpass", "div_rsolicitudes", "div_rproductos");
+	var submenus = new Array();
+	
+	for (x in listamenus)
+	{
+		submenus[x] = listamenus[x] + "_det";
+		
+		try
+		{
+			if(listamenus[x] != id)
+			{
+				if(document.getElementById(listamenus[x]).style.backgroundImage == "url(../imagenes/fondo_op.png)")
+				{
+					document.getElementById(listamenus[x]).style.backgroundImage = "";
+					document.getElementById(listamenus[x]).style.fontSize = "11px";
+					document.getElementById(listamenus[x]).style.color = "#006699";
+				}
+				
+				document.getElementById(submenus[x]).style.display = "none";	
+			}
+		} catch (err)
+		{
+			//alert("Error");
+		}
+	}
+}
+function fondomenu_act_des(id)
+{
+	if(document.getElementById(id).style.backgroundImage == "")
+	{
+		//alert(id);
+		document.getElementById(id).style.backgroundImage = "url(../imagenes/fondo_op.png)";
+		document.getElementById(id).style.fontSize = "11px";
+		document.getElementById(id).style.color = "#0000cc";
+		
+		cerrarmenus(id);
+	} 
+	/*else
+	{
+		document.getElementById(id).style.backgroundImage = "";
+		document.getElementById(id).style.fontSize = "11px";
+		document.getElementById(id).style.color = "#006699";
+	}*/
+}
+
+function desplegarDivMenu(menu)
+{
+	if(document.getElementById(menu).style.display == "none")
+	{
+		document.getElementById(menu).style.display = "block";
+	} else
+	{
+		document.getElementById(menu).style.display = "none";
+	}
+}
+
+function cambiarFlechas(menu, flecha)
+{
+	if(document.getElementById(menu).style.display == "none")
+	{
+		document.getElementById(flecha).src = "../imagenes/abajo.png";
+	} else
+	{
+		document.getElementById(flecha).src = "../imagenes/arriba.png";
+	}
+}
+
+function abrirVentana(url, ancho, alto)
+{
+	var nuevaVentana = window.open('', "_blank","titlebar=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=" + ancho + ",height=" + alto + ",top=250,left=250");
+	nuevaVentana.document.write(url);
+	nuevaVentana.document.close();
+	//nuevaVentana.document.write('<H1>Popup Test!</H1>');
+	nuevaVentana.focus();
+}
+
+function previsualizarImagen(imagen)
+{
+	var vistaprevia_imagen = "";
+	var ubicacion_imagen = "";
+	var sensor_imagen = "";
+	var resolucion_imagen = "";
+	var tipo_imagen = "";
+	var enlace_imagen = "";
+	
+	switch(imagen)
+	{
+		case "spot4_20m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_20m_color_b.png";
+			ubicacion_imagen = "Maroa, Estado Amazonas";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "20 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_20m_color_c.jpg";
+			break;
+		case "spot4_15m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_15m_color_b.png";
+			ubicacion_imagen = "Parque Nacional Morrocoy";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "15 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color<br />Bandas: 4, 1, 2 (RGB)<br /><img src=\"../imagenes/nuevo.gif\" />";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_15m_color_c.jpg";
+			break;
+		case "spot4_10m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_10m_color_b.png";
+			ubicacion_imagen = "Maroa, Estado Amazonas";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "10 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_10m_color_c.jpg";
+			break;
+		case "spot4_10m_pancro":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_10m_pancro_b.png";
+			ubicacion_imagen = "Maroa, Estado Amazonas";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "10 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Pancrom&aacute;tica";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_10m_pancro_c.jpg";
+			break;
+		case "spot4_7_5m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_7_5m_color_b.png";
+			ubicacion_imagen = "Parque Nacional Morrocoy";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "7,5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color<br />Bandas: 4, 1, 2 (RGB)<br /><img src=\"../imagenes/nuevo.gif\" />";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_7_5m_color_c.jpg";
+			break;
+		case "spot4_7_5m_pancro":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT4/spot4_7_5m_pancro_b.png";
+			ubicacion_imagen = "Parque Nacional Morrocoy";
+			sensor_imagen = "Imagen SPOT 4";
+			resolucion_imagen = "7,5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Pancrom&aacute;tica<br /><img src=\"../imagenes/nuevo.gif\" />";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT4/spot4_7_5m_pancro_c.jpg";
+			break;
+		case "spot5_10m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT5/spot5_10m_color_b.png";
+			ubicacion_imagen = "Lecher&iacute;as, Estado Anzo&aacute;tegui";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "10 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT5/spot5_10m_color_c.jpg";
+			break;
+		case "spot5_5m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT5/spot5_5m_color_b.png";
+			ubicacion_imagen = "Lecher&iacute;as, Estado Anzo&aacute;tegui";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT5/spot5_5m_color_c.jpg";
+			break;
+		case "spot5_2_5m_color":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT5/spot5_2_5m_color_b.png";
+			ubicacion_imagen = "Lecher&iacute;as, Estado Anzo&aacute;tegui";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "2,5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT5/spot5_2_5m_color_c.jpg";
+			break;
+		case "spot5_5m_pancro":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT5/spot5_5m_pancro_b.png";
+			ubicacion_imagen = "Lecher&iacute;as, Estado Anzo&aacute;tegui";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Pancrom&aacute;tica";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT5/spot5_5m_pancro_c.jpg";
+			break;
+		case "spot5_2_5m_pancro":
+			vistaprevia_imagen = "../imagenes/productos_servicios/SPOT5/spot5_2_5m_pancro_b.png";
+			ubicacion_imagen = "Lecher&iacute;as, Estado Anzo&aacute;tegui";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "2,5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Pancrom&aacute;tica";
+			enlace_imagen = "../imagenes/productos_servicios/SPOT5/spot5_2_5m_pancro_c.jpg";
+			break;
+		case "orto_rectificaciones":
+			vistaprevia_imagen = "../imagenes/productos_servicios/Procesadas/orto_rectificaciones_b.png";
+			ubicacion_imagen = "Mapa de Venezuela con la ubicaci&oacute;n de las im&aacute;genes orto-rectificadas disponibles";
+			sensor_imagen = "86 im&aacute;genes de los Sensores SPOT 4 y 5";
+			resolucion_imagen = "<a href=\"../documentos/imagenes_orto_20090401.pdf\" style=\"text-decoration:none;\" target=\"_blank\"><b style=\"color:#0000cc\">Ver listado</b></a> <img src=\"../imagenes/nuevo.gif\">";
+			tipo_imagen = "";
+			enlace_imagen = "../imagenes/productos_servicios/Procesadas/orto_rectificaciones_c.jpg";
+			break;
+		case "mosaicos":
+			vistaprevia_imagen = "../imagenes/productos_servicios/Procesadas/mosaicos_b.png";
+			ubicacion_imagen = "Mosaico de Im&aacute;genes";
+			sensor_imagen = "";
+			resolucion_imagen = "";
+			tipo_imagen = "";
+			enlace_imagen = "../imagenes/productos_servicios/Procesadas/mosaicos_c.jpg";
+			break;
+		case "vistas_3d":
+			vistaprevia_imagen = "../imagenes/productos_servicios/Procesadas/vistas_3d_b.png";
+			ubicacion_imagen = "Vista en Perspectiva, Caracas - Distrito Capital";
+			sensor_imagen = "Imagen SPOT 5";
+			resolucion_imagen = "2,5 metros de resoluci&oacute;n espacial";
+			tipo_imagen = "Color";
+			enlace_imagen = "../imagenes/productos_servicios/Procesadas/vistas_3d_c.jpg";
+			break;
+		case "indices":
+			vistaprevia_imagen = "../imagenes/productos_servicios/Procesadas/indices_b.png";
+			ubicacion_imagen = "&Iacute;ndices";
+			sensor_imagen = "";
+			resolucion_imagen = "";
+			tipo_imagen = "";
+			enlace_imagen = "../imagenes/productos_servicios/Procesadas/indices_c.jpg";
+			break;
+	}
+	
+	document.getElementById('vista').style.display = "block";
+	document.getElementById('vistaprevia_imagen').src = vistaprevia_imagen;
+	document.getElementById('ubicacion_imagen').innerHTML = ubicacion_imagen;
+	document.getElementById('sensor_imagen').innerHTML = sensor_imagen;
+	document.getElementById('resolucion_imagen').innerHTML = resolucion_imagen;
+	document.getElementById('tipo_imagen').innerHTML = tipo_imagen;
+	document.getElementById('enlace_imagen').href = enlace_imagen;
+	
+	document.getElementById('tab_vistaprevia').style.display = "block";
+	cambiarTab('tab_vistaprevia');
+}
+
+
+function cambiarTab(id)
+{
+	document.getElementById(id).className = "tabOn";
+	
+	switch(id)
+	{
+		case "tab_spot5":
+			document.getElementById('tab_spot4').className = "tabOff";
+			document.getElementById('tab_vistaprevia').className = "tabOff";
+			
+			document.getElementById('tab_spot4_imagen').style.display = "none";
+			document.getElementById('tab_spot5_imagen').style.display = "block";
+			document.getElementById('tab_vistaprevia_imagen').style.display = "none";
+			
+			document.getElementById('tab_spot4_detalles').style.display = "none";
+			document.getElementById('tab_spot5_detalles').style.display = "block";
+			document.getElementById('tab_vistaprevia_detalles').style.display = "none";
+			break;
+		case "tab_spot4":
+			document.getElementById('tab_spot5').className = "tabOff";
+			document.getElementById('tab_vistaprevia').className = "tabOff";
+			
+			document.getElementById('tab_spot4_imagen').style.display = "block";
+			document.getElementById('tab_spot5_imagen').style.display = "none";
+			document.getElementById('tab_vistaprevia_imagen').style.display = "none";
+			
+			document.getElementById('tab_spot4_detalles').style.display = "block";
+			document.getElementById('tab_spot5_detalles').style.display = "none";
+			document.getElementById('tab_vistaprevia_detalles').style.display = "none";
+			break;
+		case "tab_vistaprevia":
+			document.getElementById('tab_spot5').className = "tabOff";
+			document.getElementById('tab_spot4').className = "tabOff";
+			
+			document.getElementById('tab_spot4_imagen').style.display = "none";
+			document.getElementById('tab_spot5_imagen').style.display = "none";
+			document.getElementById('tab_vistaprevia_imagen').style.display = "block";
+			
+			document.getElementById('tab_spot4_detalles').style.display = "none";
+			document.getElementById('tab_spot5_detalles').style.display = "none";
+			document.getElementById('tab_vistaprevia_detalles').style.display = "block";
+			break;
+	}
+}
+
+///// OJO 
+function Pagina(nropagina){
+	//donde se mostrara los registros
+	divContenido = document.getElementById('contenido');
+ 
+	objetoAjax = nuevoAjax();
+	//uso del medoto GET
+	//indicamos el archivo que realizara el proceso de paginar
+	//junto con un valor que representa el nro de pagina
+	objetoAjax.open("GET", "paginador.php?pag="+nropagina);
+	divContenido.innerHTML= '<img src="anim.gif">';
+	objetoAjax.onreadystatechange=function()
+	{
+		if (objetoAjax.readyState==4)
+		{
+	  		//mostrar resultados en esta capa
+	  		divContenido.innerHTML = objetoAjax.responseText
+	 	}
+	}
+	//como hacemos uso del metodo GET
+	//colocamos null ya que enviamos 
+	//el valor por la url ?pag=nropagina
+	objetoAjax.send(null)
+}

@@ -1,0 +1,231 @@
+<?php
+	/**
+	*nombreaplicacion operacionV
+	*
+	*Clase Vista de la Pagina index.php
+	*En esta clase se encuentran todas las interfaces de la pagina index.php
+	*@copyright Personal
+	*@author Juan Carlos Rodriguez
+	*@version 1.0
+	*@package empresaV
+	*
+	*/
+	class operacionV extends comun 
+	{
+		
+		/**
+		* string que guarda la dirección de las imagenes que se utilizaran en  index.php.
+		* @var string $dirImagenes
+		* @access public
+		*/
+		var $dirImagenes="";
+		/**
+		* string que guarda el nombre del dev de contenido  de la pagina index.php.
+		* @var string $divCont
+		* @access public
+		*/
+		var $divCont="";
+		/**
+		* string que guarda el nombre de la pagina que seguira luego del evento.
+		* @var string $paginaSiguiente
+		* @access public
+		*/
+		var $paginaSiguiente="";
+		/**
+		* string que guarda el nombre de las pagina .
+		* @var string $pagina
+		* @access public
+		*/
+		var $pagina="";
+		var $objError="";
+		/**
+		*
+		*Constructor
+		*
+		*Esta Función asigna parametros a las variables miembros de la clase.
+		*
+		*@param string $dirImagenes es la dirección donde se encuentran las imagenes de la aplicación.
+		*@param string $divCont es id de el div donde se colocara todo el contenido de la pagina.
+		*@return void
+		*/
+		function empresaV($objError="",$dirImagenes="",$divCont="",$paginas="")
+		{		
+			if(!empty($objError))
+			{
+				$this->objError=$objError;
+			}
+			if(!empty($dirImagenes))
+			{
+				$this->dirImagenes=$dirImagenes;
+			}
+			else
+			{
+				$this->dirImagenes=varConf::getRutasAccesoImagen("imagenes");
+			}
+			if(!empty($divCont))
+			{
+				$this->divCont=$divCont;
+			}
+			else
+			{
+				$this->divCont=varConf::getAtributosPag(substr(__CLASS__, 0, -1),"divContenido");
+			}
+			if(!empty($paginas))
+			{
+				$this->pagina=$paginas;
+			}
+			else
+			{
+				$this->pagina=varConf::getPaginas();
+			}
+	   		comun::comun($this->dirImagenes,$this->pagina);
+		}
+		/**
+		*
+		*setPaginaSig
+		*
+		*Descripsión
+		*
+		*@param tipo $nomvar Descripción
+		*@return tipo $nomvar Descripción
+		*/
+		function setPaginaSig($valor="")
+		{
+			$this->paginaSiguiente=$valor;	
+		}
+		/**
+		*
+		*crear
+		*
+		*Esta función crea el codigo html para visualizar, cargar y modificar los datos
+		*
+		*@param string $comboEstado Es el codigo html del combo estado 
+		*@param string $comboMunicipio Es el codigo html del combo municipio 
+		*@param string $comboParroquia Es el codigo html del combo parroquia 
+		*@param array $form confiene los datos del registro que se mostrara por pantalla para visualizar o modificar.
+		*@param integer $evento Es una variable de control para bloquear o desbloquear la carga de los datos 1 para estar bloqueada (viualizar), 2 para desbloquear (modificar)
+		*@param integer $id es el id del registro que se va a modificar (se pasa por aqui para poder pasarselo a la función que modificará)
+		*@return string $html Es el codigo html.
+		*/
+		function crear($comboEstado="",$comboMunicipio="",$comboParroquia="",$form="",$evento="",$id="")
+		{
+			if(!empty($form) and is_array($form))
+			{
+				if($evento==1)
+					$bloqued=" disabled=\"true\"";
+				else 
+					$bloqued=" ";
+				$nombre="value=\"".htmlentities($form[1][1])."\"".$bloqued;
+				$direccion=htmlentities($form[1][2]);
+			}
+			else 
+			{
+				$nombre="";
+				$direccion="";
+			}
+			$html="
+			<div id=\"formularioRegistro\">
+					<form  id=\"registro\" name=\"registro\" action=\"\" method=\"POST\">
+						<table width=\"720px\" align=\"center\">
+							<tr>
+								<td align=\"center\">
+									<span id=\"msg_general\"></span>
+								</td>
+							</tr>
+							<tr>
+								<td class=\"tdtitulo_form\" align=\"center\">
+									<p class=\"titulo_secciones\">Datos de la Empresa</p>
+								</td>
+							</tr>
+							<tr>
+								<td align=\"center\">
+									<div id=\"divempresa\" style=\"display:block\">
+									<table width=\"700px\" style=\"font-size:12px\">
+										<tr>
+											<td width=\"280px\" align=\"right\">
+												Nombre de la Empresa<sup class=\"asterisk\">*</sup>: 
+											</td>
+											<td width=\"440px\" align=\"left\">
+												<input type=\"text\" id=\"empresa\" name=\"txtempresa\" size=\"38\" class=\"cajatexto\" ".$nombre.">
+												<span id=\"msg_empresa\"></span>
+											</td>
+										</tr>
+										<!--<tr>
+							                   <td width=\"280px\" align=\"right\">
+							                   </td>
+							                   <td width=\"440px\" align=\"left\">
+							                       <span class=\"forminfo\">&laquo; La contrase&ntilde;a debe ser diferente al nombre de usuario, debe comenzar con una letra y su longitud debe estar entre 6 y 10 caracteres &raquo;</span>
+							                   </td>
+							            </tr>-->
+							            <tr>
+											<td width=\"280px\" align=\"right\">
+												Estado<sup class=\"asterisk\">*</sup>: 
+											</td>
+											<td width=\"440px\" align=\"left\">
+												<div id=\"divestado\">".$comboEstado."</div>
+											</td>
+										</tr>
+										<tr>
+											<td width=\"280px\" align=\"right\">
+												Municipio<sup class=\"asterisk\">*</sup>: 
+											</td>
+											<td width=\"440px\" align=\"left\">
+												<div id=\"divmunicipio\">".$comboMunicipio."</div>
+											</td>
+										</tr>
+										<tr>
+											<td width=\"280px\" align=\"right\">
+												Parroquia<sup class=\"asterisk\">*</sup>: 
+											</td>
+											<td width=\"440px\" align=\"left\">
+												<div id=\"divparroquia\">".$comboParroquia."</div>
+											</td>
+										</tr>
+										<tr>
+											<td align=\"right\">
+												Direcci&oacute;n:
+											</td>
+											<td align=\"left\">
+												<textarea id=\"direccion\" name=\"txtdireccion\" class=\"cajatexto\" cols=\"38\" rows=\"5\" ".$bloqued.">".$direccion."</textarea>
+												<br /><span id=\"msg_direccion\"></span>
+											</td>
+										</tr>
+									</table>
+									</div>
+								</td>
+							</tr>";
+			if(!empty($id)and $evento==0)
+			{
+							$html.="
+							<tr>
+								<td align=\"center\">
+									<div id=\"boton\" style=\"text-align:center\">
+										<br />
+										<img id=\"btnguardar_actDesOperador\" src=\"../imagenes/boton_guardar.png\" onclick=\"xajax_controladora(3,xajax.getFormValues('registro'),0,'$id');\" onmouseover=\"javascript:document.getElementById('btnguardar_actDesOperador').src='../imagenes/boton_guardar_on.png'\" onmouseout=\"javascript:document.getElementById('btnguardar_actDesOperador').src='../imagenes/boton_guardar.png'\"/><br />
+										<span style=\"font-size:9px\"><sup class=\"asterisk\">*</sup> <b>Campos obligatorios</b></span>
+									</div>
+								</td>
+							</tr>";
+			}
+			if(empty($form))
+			{
+							$html.="
+							<tr>
+								<td align=\"center\">
+									<div id=\"boton\" style=\"text-align:center\">
+										<br />
+										<img id=\"btnguardar_actDesOperador\" src=\"../imagenes/boton_guardar.png\" onclick=\"xajax_controladora(2,xajax.getFormValues('registro'),0)\" onmouseover=\"javascript:document.getElementById('btnguardar_actDesOperador').src='../imagenes/boton_guardar_on.png'\" onmouseout=\"javascript:document.getElementById('btnguardar_actDesOperador').src='../imagenes/boton_guardar.png'\"/><br />
+										<span style=\"font-size:9px\"><sup class=\"asterisk\">*</sup> <b>Campos obligatorios</b></span>
+									</div>
+								</td>
+							</tr>";
+			}
+			$html.="
+						</table>
+					</form>
+				</div>
+			";
+			return $html;	
+		}
+	}
+?>

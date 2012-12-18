@@ -1,0 +1,966 @@
+/*****************************************************************
+* Archivo de Validaciones                                        *
+* Elaborado por: Jesús Rodríguez                                 *
+* Laboratorio de Procesamiento Avanzado de Imagenes de Satélites *
+* Centro de Procesamiento Digital de Imágenes                    *
+* Instituto de Ingeniería                                        *
+* Febrero, 2008                                                  *
+******************************************************************/
+
+
+			//función para validar nombres propios
+			function validarNombres(valor,campo)
+			{
+				//alert('En validarNombres');
+				if((valor.value != null) && (valor.value !=""))
+				{
+					var patronNombres = /^\S[\s\.\,\'\-A-ZÑ?É?ÓÚÜa-zñáéíóúü]+\S$/;
+					if(valor.value.match(patronNombres))
+					{
+						return true;
+					} else
+					{
+						alert('El campo ' + campo + ' posee caracteres inválidos.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar nombres propios
+			
+			
+			//función para validar nombres de instituciones, departamentos
+			function validarInstitucion(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var patronInstitucion = /^\S[\s\w\.\,\'\(\)\-Ñ?É?ÓÚÜñáéíóúü\°]+\S$/;
+					if(valor.value.match(patronInstitucion))
+					{
+						return true;
+					} else
+					{
+						alert('El campo ' + campo + ' posee caracteres inválidos.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin de función para validar nombres de instituciones, departamentos
+			
+			
+			//función para validar campos de dirección, descripción
+			function validarDireccion(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var patronDireccion = /^\S[\s\w\.\,\;\'\"\(\)\-Ñ?É?ÓÚÜñáéíóúü\°]+\S$/;
+					if(valor.value.match(patronDireccion))
+					{
+						return true;
+					} else
+					{
+						alert('El campo ' + campo + ' posee caracteres inválidos.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar campos de dirección, descripción
+			
+			
+			//función para validar código postal
+			function validarCodPostal(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var patronCodPostal = /^[0-9]{4}[A-Za-z]?$/;
+					if(valor.value.match(patronCodPostal))
+					{
+						return true;
+					} else
+					{
+						alert('Formato de ' + campo + ' inválido.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}	
+			}
+			//fin función para validar código postal
+			
+			
+			//función para validar teléfono codarea-numero-ext (opcional extensión), ej. 0212-9999999 0426-5555555
+			function validarTelefono(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var patronTelefono = /^0[2|4][0-9][0-9]-[0-9]{7}(-[0-9]{3,4})?$/;
+					if(valor.value.match(patronTelefono))
+					{
+						return true;
+					} else
+					{
+						alert('Formato de ' + campo + ' inválido.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+				
+			}
+			//fin función para validar teléfono
+			
+			
+			//función para validar correo electrónico
+			function validarEmail(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					//var patronEmail = /^(\w+)(([\.-_]?)(\w*))*@(\w+)([-_]?)(\w*)\.((\w+)([-_]?)(\w*)\.)*([\w]{2,4})$/;
+					var patronEmail = /^[\w\.\-\_]+@[\w\-\_]+\.([\w\-\_]+\.)*[\w]{2,4}$/;
+					if(valor.value.match(patronEmail))
+					{
+						return true;
+					} else
+					{
+						alert('Formato de ' + campo + ' inválido.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			// fin función para validar correo electrónico
+			
+			
+			//función para validar porcentaje de 0 a 100
+			function validarPorcentaje(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var patronNumero = /^[0-9]+$/;
+					if(valor.value.match(patronNumero))
+					{
+						if((valor.value >= 0) && (valor.value <= 100))
+						{
+							return true;
+						} else
+						{
+							alert('Rango de ' + campo + ' inválido.');
+							valor.focus();
+							return false;
+							//exit;
+						}
+					} else
+					{
+						alert('Formato de ' + campo + ' inválido.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+				
+			}
+			//fin función para validar porcentaje
+			
+			
+			//función para convertir una fecha dd/mm/aaaa a un número entero
+			function convertirFechaNum(fecha)
+			{
+				var fecha = fecha.split('/');
+				var dia = parseInt(fecha[0]);
+				var mes = parseInt(fecha [1]);
+				var anno = parseInt(fecha[2]);
+				
+				var numanno = anno * 365;
+				var nummes;
+				
+				switch(mes)
+				{
+					case 01:
+						nummes = mes * 30;
+						break
+					case 02:
+						nummes = mes * 61;
+						break
+					case 03:
+						nummes = mes * 91;
+						break
+					case 04:
+						nummes = mes * 122;
+						break
+					case 05:
+						nummes = mes * 152;
+						break
+					case 06:
+						nummes = mes * 183;
+						break
+					case 07:
+						nummes = mes * 213;
+						break
+					case 08:
+						nummes = mes * 244;
+						break
+					case 09:
+						nummes = mes * 274;
+						break
+					case 10:
+						nummes = mes * 304;
+						break
+					case 11:
+						nummes = mes * 335;
+					case 12:
+						nummes = mes * 365;
+						break
+					default:
+						nummes = 0;
+				}
+				
+				var numtotaldias = numanno + nummes + dia;
+				return numtotaldias;
+			}
+			//fin función para convertir una fecha a entero
+			
+			
+			//función para validar fecha, que la seleccionada no sea mayor a la actual
+			function validarFecha(valor, campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					//Obtener fecha actual
+					var fecha = new Date();
+					var dia = fecha.getDate();
+					var mes = fecha.getMonth() + 1;
+					var anno = fecha.getFullYear();
+					var hoy = dia + '/' + mes + '/' + anno;
+					var inicio = '01/02/2007';
+					
+					var inicio = convertirFechaNum(inicio);
+					var fechasys = convertirFechaNum(hoy);
+					var fechareq = convertirFechaNum(valor.value);
+					
+					if((inicio < fechareq) && (fechareq <= fechasys))
+					{
+						return fechareq;
+					} else
+					{
+						alert(campo + ' inválida.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar fecha
+			
+			//función para validar un rango de fechas
+			function validarFechas(formulario)
+			{
+				var desde = validarFecha(formulario.txtfecha1, 'Fecha inicial');
+				if(desde==false){return false};
+				var hasta = validarFecha(formulario.txtfecha2, 'Fecha final');
+				if(hasta==false){return false};
+				
+				if(desde < hasta)
+				{
+					return true;
+				} else
+				{
+					alert ("Rango de fechas inválido.\nPor favor verifique antes de continuar.");
+					return false;
+					//exit;
+				}
+			}
+			// fin función para validar rango de fechas
+			
+			//función para validar listas tipo combo
+			function validarCombo(valor,campo)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					return true;
+				} else
+				{
+					alert('Por favor seleccione ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar combo
+			
+			
+			//función para validar radio button
+			function validarRadio(valor,campo)
+			{
+				var i;
+				var v = 0;
+				for (i = 0; i < valor.length; i++)
+				{ 
+					if(!valor[i].checked) ++v; 
+				}
+				if(v < valor.length)	
+				{
+					return true;
+				} else
+				{
+					alert('Por favor seleccione ' + campo + '.');
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar radio
+			
+			
+			//función para validar Checkbox
+			function validarCheck(formulario,mensaje)
+			{
+				//alert('En validarCheck');
+				if((formulario.chkenvi.checked == false) && (formulario.chkerdas.checked == false) && (formulario.chkpci.checked == false) && (formulario.chkilwis.checked == false) && (formulario.chkspring.checked == false) && (formulario.txtespecifique.value == ""))
+				{
+					alert('Por favor seleccione ' + mensaje + '.');
+					return false;
+					//exit;
+				} else
+				{
+					return true;
+				}
+			}
+			//fin función validar Checkbox
+			
+			
+			//función para validar un punto de coordenada geográfica en formato decimal
+			function validarCoordenada(valor,campo,texto)
+			{
+				if((valor.value != 'null') && (valor.value !=''))
+				{
+					var coord;
+					var patronCoordenada = /^-?[0-9]{1,2}(\.[0-9]{1,8})?$/;
+					if(valor.value.match(patronCoordenada))
+					{
+						coord = parseFloat(valor.value);
+						switch (campo)
+						{
+							case 'txtx1':
+								var coordmin = -73.5;
+								var coordmax = -58.0;
+								break;
+							case 'txtx2':
+								var coordmin = -73.5;
+								var coordmax = -58.0;
+								break;
+							case 'txty1':
+								var coordmin = 0;
+								var coordmax = 13;
+								break;
+							case 'txty2':
+								var coordmin = 0;
+								var coordmax = 13;
+								break;
+						}
+						if((coord >= coordmin) && (coord <= coordmax))
+						{
+							return coord;
+						} else
+						{
+							alert('La ' + texto + ' está fuera del rango permitido.');
+							valor.focus();
+							return false;
+							//exit;
+						}
+					} else
+					{
+						alert('Formato de ' + texto + ' inválido.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + texto + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar coordenada
+			
+			//función para validar las coordenadas geográficas en formato decimal
+			function validarCoordenadas(formulario)
+			{
+				//alert ('En validarCoordenadas()');
+				var x1 = validarCoordenada(formulario.txtx1, formulario.txtx1.name, 'Coordenada X1');
+				if(x1==false){return false};
+				var y1 = validarCoordenada(formulario.txty1, formulario.txty1.name, 'Coordenada Y1');
+				if(y1==false){return false};
+				var x2 = validarCoordenada(formulario.txtx2, formulario.txtx2.name, 'Coordenada X2');
+				if(x2==false){return false};
+				var y2 = validarCoordenada(formulario.txty2, formulario.txty2.name, 'Coordenada Y2');
+				if(y2==false){return false};
+				
+				if((x1 < x2) && (y1 > y2))
+				{
+					return true;
+				} else
+				{
+					alert("La longitud 1 debe ser menor a la longitud 2, y la latitud 1 mayor a la latitud 2.\n Por favor verifique antes de continuar.");
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar las coordenadas
+			
+			
+			function validar_resolucion()
+{
+	if((document.formulario.resolucion1.checked==false)&&(document.formulario.resolucion2.checked==false)&&(document.formulario.resolucion3.checked==false)&&(document.formulario.resolucion4.checked==false))
+													{
+													alert('Por favor Escoga el tipo de resolucion Espacial');
+												
+													return false;
+													}else{
+														  return true;
+														  }
+													
+}
+
+function validar_angulo()
+{
+	
+					
+	if(document.formulario.angulo.value=="null")
+		{
+			if(document.formulario.check.checked == false)
+				{	
+				alert('Escoga un Angulo de Toma');
+				
+				return false;
+				}else{
+					
+						if((document.formulario.coordenada1.value == "" )||(document.formulario.coordenada2.value == ""))
+							{
+							 alert('Introduzca Datos de Angulo de Toma');
+							 document.formulario.coordenada1.focus();
+							 document.formulario.coordenada2.focus();
+							 return false;
+							}else{
+								  var patron = /^-?([0-9]){1,2}([.]){1}([0-9]){1,4}$/ ;
+								  if((document.formulario.coordenada1.value.match(patron))&&(document.formulario.coordenada2.value.match(patron)))
+									{
+									 coord1 = parseFloat(document.formulario.coordenada1.value);	
+									 coord2 = parseFloat(document.formulario.coordenada2.value);	
+									 	if(coord1<coord2)
+											{return true;
+											 
+											 }else{
+												  alert('La Coordenada 1 debe ser menor que la Coordenada 2');
+												  document.formulario.coordenada1.focus();
+										  		  document.formulario.coordenada2.focus();	 
+												  return false;
+												 }
+									 
+									}else{alert('Formato Incorrecto, vuelva a Introducir Intervalo de Coordenadas');
+										  document.formulario.coordenada1.focus();
+										  document.formulario.coordenada2.focus();
+										  return false;
+										  }
+								}
+								
+					}
+							
+				
+			
+		}else{return true;}
+			
+													
+
+
+}
+
+function validar_satelite()
+{
+if(document.formulario.satelite.checked == true)
+	{
+		if((document.formulario.spot2.checked==true)||(document.formulario.spot4.checked==true)||(document.formulario.spot5.checked==true))
+			{return true;}else{
+				alert('Por Favor Escoga una Mision');
+				return false;
+				}
+	}
+		 else{
+		 alert('Por Favor Escoga un Satelite');
+		 return false;
+		 }
+
+
+}
+
+function validar_bandas()
+{
+if(document.formulario.bandas.value=="null")
+		{
+		 alert('Por favor Escoga Bandas');
+		 
+		 return false;
+
+}
+return true;
+
+}
+
+function validar_nubes()
+{
+if(document.formulario.CoNubes.value=="null")
+		{
+		 alert('Por favor Escoga Cobertura de Nubes');
+		
+		 return false;
+
+}
+return true;
+
+}
+
+function validar_coordenadas()
+{
+	if((document.formulario.lonmin.value=="")||(document.formulario.latmin.value=="")||(document.formulario.lonmax.value=="")||(document.	formulario.latmax.value==""))
+	{
+	alert('Por Favor Introduzcas Coordenadas Geograficas');
+	
+	return false;
+	}else{
+			
+			var coord = /^-?([0-9]){1,2}([.]){1}([0-9]){1,4}$/;
+			if( (document.formulario.lonmin.value.match(coord))&&(document.formulario.latmin.value.match(coord))&&(document.formulario.lonmax.value.match(coord))&&(document.formulario.latmax.value.match(coord)))
+				{
+				var lat1 = parseFloat(document.formulario.lonmin.value);
+				var lat2 = parseFloat(document.formulario.latmin.value);
+				var long1 = parseFloat(document.formulario.latmax.value);
+				var long2 = parseFloat(document.formulario.lonmax.value);
+				var latmax = 13;
+				var latmin = 0;
+				var longmax = -58.0 ;
+				var longmin = -73.5;
+				
+				if((lat1>=latmax)||(lat1<=latmin))
+							{
+							 alert('Latitud 1 se encuatra fuera del rango');
+							 
+							 return false;
+							}
+				
+				if((lat2>=latmax)||(lat2<=latmin))
+							{
+							 alert('Latitud 2 se encuatra fuera del rango');
+							
+							 return false;
+							}
+				
+				if((long1>=longmax)||(long1<=longmin))
+							{
+							alert('Longitud 1 se encuentra fuera del rango');
+						
+							return false;
+							}	
+							
+				if((long2>=longmax)||(long2<=longmin))
+							{
+							alert('Longitud 2 se encuentra fuera del rango');
+							
+							return false;
+							}					
+			    if(lat1<lat2)
+					{
+					alert('Latitud 1 debe ser mayor que latitud 2');
+				
+					return false;
+					}
+				if(long1<long2)
+					{
+					alert('Longitud 2 debe ser mayor que Longitud 1');
+					
+					return false;
+					}
+				}
+			    
+				else{
+	                  alert('Campo de Coordenadas Invalido')
+					
+					  return false;		
+					 }
+	     }return true;
+	
+}
+
+function validar(formulario)
+{
+			   		//alert('Dentro de validaciones.js');
+				
+				//validar datos del formulario de busqueda
+				/*if(validar_coordenadas()==false){return false};
+				if(validarFechas()==false){return false};
+				if(validar_resolucion()==false){return false};
+				if(validar_nubes()==false){return false;};
+				if(validar_angulo()==false){return false};
+				if(validar_satelite()==false){return false};
+				if(validar_bandas()==false){return false};*/
+				//alert('Todos los campos son correctos.');
+				_Ajax();				
+				//ObtenerDatos('ajax_post.php','ContTabul');
+				CambiarEstilo('bt3');
+			
+}
+
+			//fin funciones principales validaciones
+			
+			
+//función para validar fecha, que la seleccionada no sea mayor a la actual
+			
+			
+			//función para validar un rango de fechas
+			function validarFechas2()
+			{
+				var desde = validarFecha3(document.formulario.txtfecha1.value, 'Fecha inicial');
+				if(desde==false){return false};
+				var hasta = validarFecha3(document.formulario.txtfecha2.value, 'Fecha final');
+				if(hasta==false){return false};
+				
+				if(desde < hasta)
+				{
+					return true;
+				} else
+				{
+					alert ("Rango de fechas inválido.\nPor favor verifique antes de continuar.");
+					return false;
+					//exit;
+				}
+			}
+			// fin función para validar rango de fechas		
+			
+			function validarFecha3(valor, campo)
+			{
+				if((valor != 'null') && (valor  !=''))
+				{
+					//Obtener fecha actual
+					var fecha = new Date();
+					var dia = fecha.getDate();
+					var mes = fecha.getMonth() + 1;
+					var anno = fecha.getFullYear();
+					var hoy = dia + '/' + mes + '/' + anno;
+					var inicio = '01/02/2007';
+					
+					var inicio = convertirFechaNum(inicio);
+					var fechasys = convertirFechaNum(hoy);
+					var fechareq = convertirFechaNum(valor);
+					
+					if((inicio < fechareq) && (fechareq <= fechasys))
+					{
+						return fechareq;
+					} else
+					{
+						alert(campo + ' inválida.');
+						valor.focus();
+						return false;
+						//exit;
+					}
+				} else
+				{
+					alert('Por favor ingrese ' + campo + '.');
+					valor.focus();
+					return false;
+					//exit;
+				}
+			}
+			//fin función para validar fecha
+			function calen()
+			{
+				Calendar.setup({
+					inputField  : "txtfecha1",     // id del campo de texto
+					ifFormat    : "%d/%m/%Y",     // formato de la fecha que se escriba en el campo de texto
+					button      : "lanzador1",     // el id del botón que lanzará el calendario
+					singleClick : true
+				});
+				Calendar.setup({
+					inputField  : "txtfecha2",     // id del campo de texto
+					ifFormat    : "%d/%m/%Y",     // formato de la fecha que se escriba en el campo de texto
+					button      : "lanzador2",     // el id del botón que lanzará el calendario
+					singleClick : true
+				});
+			}
+			
+			
+			
+			
+			if ( typeof XMLHttpRequest == "undefined" )
+XMLHttpRequest = function(){
+return new ActiveXObject(
+navigator.userAgent.indexOf("MSIE 5?") >= 0 ?
+"Microsoft.XMLHTTP" : "Msxml2.XMLHTTP"
+);
+};
+var ob = new XMLHttpRequest();
+
+function _Ajax()
+{
+	//var bandas=document.getElementById("bandas").value;
+	var latmin=document.getElementById("latmin").value;
+	var lonmax=document.getElementById("lonmax").value;
+	var lonmin=document.getElementById("lonmin").value;
+	var latmax=document.getElementById("latmax").value;
+	var CoNubes=document.getElementById("CoNubes").value;
+	var angulo=document.getElementById("angulo").value;
+	//var satelite=document.getElementById("satelite").value;
+	
+	//Momentaneo para prueba
+	/*/if(document.formulario.spot2.checked==true){var mision1=document.getElementById("spot2").value;}
+	if(document.formulario.spot4.checked==true){var mision2=document.getElementById("spot4").value;}
+	if(document.formulario.spot5.checked==true){var mision3=document.getElementById("spot5").value;}*/
+	if(document.formulario.resolucion1.checked==true){var resolucion1=document.getElementById("resolucion1").value;}
+	if(document.formulario.resolucion2.checked==true){var resolucion2=document.getElementById("resolucion2").value;}
+	if(document.formulario.resolucion3.checked==true){var resolucion3=document.getElementById("resolucion3").value;}
+	if(document.formulario.resolucion4.checked==true){var resolucion4=document.getElementById("resolucion4").value;}
+	if(document.formulario.resolucion5.checked==true){var resolucion5=document.getElementById("resolucion5").value;}
+	if(document.formulario.resolucion6.checked==true){var resolucion6=document.getElementById("resolucion6").value;}
+	var fechainicial=document.getElementById("txtfecha1").value;
+	var fechafinal=document.getElementById("txtfecha2").value;
+	//Fin Momentaneo para prueba
+	
+	//var apellido=document.getElementById("Apellido").value;
+	ob.open("POST","ajax_post.php",true);
+	ob.onreadystatechange=function(){
+	if(ob.readyState==4)
+	{
+	
+	//var respuesta=obj.responseText;
+	//document.getElementById("resultado").innerHTML=respuesta;
+	ObtenerDatos('\pruebas\paginas\ajax_post.php','ContTabul');
+	}
+	}
+	ob.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	ob.send("latmin="+latmin+"&lonmax="+lonmax+"&lonmin="+lonmin+"&latmax="+latmax+"&CoNubes="+CoNubes+"&angulo="+angulo+"&fechainicial="+fechainicial+"&fechafinal="+fechafinal+"&resolucion1="+resolucion1+"&resolucion2="+resolucion2+"&resolucion3="+resolucion3+"&resolucion4="+resolucion4+"&otravariable=1");
+
+}
+
+/*var peticion = false; 
+if (window.XMLHttpRequest) {
+      peticion = new XMLHttpRequest();
+      } else if (window.ActiveXObject) {
+            peticion = new ActiveXObject("Microsoft.XMLHTTP");
+}*/
+var peticion = new XMLHttpRequest();
+function ObtenerDatos(datos,divID) { 
+if(peticion) {
+    // var obj = document.getElementById(divID); 
+     peticion.open("POST", datos); 
+     peticion.onreadystatechange = function()  { 
+          if (peticion.readyState == 4) { 
+              //obj.innerHTML = peticion.responseText; 
+          var respuesta=ob.responseText;
+			document.getElementById(divID).innerHTML=respuesta;
+		  } 
+     } 
+peticion.send(null); 
+}
+}
+
+function Obtener(datos,divID) { 
+if(peticion) {
+     var obj = document.getElementById(divID); 
+     peticion.open("GET", datos); 
+     peticion.onreadystatechange = function()  { 
+          if (peticion.readyState == 4) { 
+               obj.innerHTML = peticion.responseText; 
+               if(datos=='cat.php'){startmenu();calen();}
+          } 
+     } 
+peticion.send(null); 
+}
+
+}
+
+
+function CambiarEstilo(id) {
+	var elementosMenu = getElementsByClassName(document, "li", "activo");
+	for (k = 0; k< elementosMenu.length; k++) {
+	elementosMenu[k].className = "inactivo";
+	}
+	var identity=document.getElementById(id);
+	identity.className="activo";
+	
+}
+
+/*
+    function getElementsByClassName
+    Written by Jonathan Snook, http://www.snook.ca/jonathan
+    Add-ons by Robert Nyman, http://www.robertnyman.com
+*/
+
+function getElementsByClassName(oElm, strTagName, strClassName){
+    var arrElements = (strTagName == "*" && document.all)? document.all : oElm.getElementsByTagName(strTagName);
+    var arrReturnElements = new Array();
+    strClassName = strClassName.replace(/\-/g, "\\-");
+    var oRegExp = new RegExp("(^|\\s)" + strClassName + "(\\s|$)");
+    var oElement;
+    for(var i=0; i<arrElements.length; i++){
+        oElement = arrElements[i];      
+        if(oRegExp.test(oElement.className)){
+            arrReturnElements.push(oElement);
+        }   
+    }
+    return (arrReturnElements)
+}
+function chekear_todos(valor)
+{
+	var i;
+	if(document.getElementById('principa').checked==true)
+	{
+	for(i=0;i<=valor;i++)
+	{
+		if(document.getElementById(i))
+		{
+			document.getElementById(i).checked=true;
+		}
+     }
+			
+	}
+	if(document.getElementById('principa').checked==false)
+	{
+		for(i=0;i<=valor;i++)
+		{
+			if(document.getElementById(i))
+			{
+				document.getElementById(i).checked=false;
+			}
+			
+	     }
+	}
+}
+
+function startmenu()
+{
+	document.getElementById('menu1').style.display = "none";
+	document.getElementById('menu2').style.display = "none";
+	document.getElementById('menu3').style.display = "none";
+	document.getElementById('menu4').style.display = "none";
+	document.getElementById('menu5').style.display = "none";
+	document.getElementById('menu6').style.display = "none";
+	document.getElementById('menu7').style.display = "none";
+
+}
+//Fin funcion para miostrar y ocultar div
+//Funcion para ocultar y mostrar checkbox
+function menufunc(menuId)
+{
+	if(document.getElementById(menuId).style.display == "none")
+	{
+		
+		document.getElementById(menuId).style.display = "block";
+	}
+	else
+	{
+		document.getElementById(menuId).style.display = "none";
+	}
+}
+								
+function popups(URL)
+{
+	var nuevaVentana = window.open('', "_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=520,height=500");
+	nuevaVentana.document.write(URL);
+	nuevaVentana.document.close();
+	nuevaVentana.focus();
+}
+			
+			
+			
+
+
+
+
+function menufunc2(id)
+{	if(id==1)
+	{
+			if(document.getElementById('resolucion').style.display == "none")
+			{	
+				if(document.getElementById('mision').style.display == "block")
+					{
+					document.getElementById('mision').style.display = "none";
+					}
+				
+				document.getElementById('resolucion').style.display = "block";
+				
+			}
+			else
+			{
+				document.getElementById('resolucion').style.display = "none";
+			}
+	}
+	if(id==2)
+	{
+		if(document.getElementById('mision').style.display == "none")
+		{
+			if(document.getElementById('resolucion').style.display == "block")
+				{
+				document.getElementById('resolucion').style.display = "none";
+				}
+				
+			document.getElementById('mision').style.display = "block";
+			
+		}
+		else
+		{
+			document.getElementById('mision').style.display = "none";
+		}
+	}
+}

@@ -1,0 +1,172 @@
+;****************************************************************
+;                                                               *
+;En este archivo se encuentran los valores generales para       *
+;lograr funcionar la aplicación                                 *
+;                                                               *
+;****************************************************************
+
+[rutasGenerales]
+;=========================
+;  Archivo de Variables  *
+;=========================
+variableglobales=:variableglobales.php
+
+;=========================
+;  Ruta de imagenes      *
+;=========================
+rutaImagenes=:/serverapache/dev/fomento/imagenes/
+
+;=========================
+;  Ruta de class         *
+;=========================
+rutaClass=:/serverapache/dev/fomento/class/
+
+;=========================
+;  Ruta de paginas       *
+;=========================
+rutaPaginas=:/serverapache/dev/fomento/paginas/
+
+;=========================
+;  Ruta de estilos       *
+;=========================
+rutaEstilos=:/serverapache/dev/fomento/estilos/
+
+;=========================
+;  Ruta de librerias     *
+;=========================
+rutaLibrerias=:/serverapache/dev/fomento/librerias/
+
+;=========================
+;  Ruta de documentos     *
+;=========================
+rutaDocumentos=:/serverapache/dev/fomento/documentos/
+
+[rutasAccesoImagen]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+imagenes=../imagenes/
+
+
+[rutasAccesoJs]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+javaScript=../class/other/
+
+
+[rutasAccesoEstilo]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+estilo=../estilos/
+
+[rutasAccesoLibreriasI]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+pagina=../librerias/pagina.php
+classlibJavaScript=../librerias/classlibJavaScript.php
+classlibPc=../librerias/classlibPc.php
+classlibSession=../librerias/classlibSession.php
+classlibFecHor=../librerias/classlibFecHor.php
+classlibArchivosTxt=../librerias/classlibArchivosTxt.php
+classlibMail=../librerias/classlibMail.php
+xjax=../librerias/xajax/xajax.inc.php
+error=../librerias/error.php
+classlibSessionI=../../librerias/classlibSession.php
+errorI=../../librerias/error.php
+lastRSS=../librerias/lastRSS.php
+securimage=../librerias/securimage.php
+
+[rutasAccesoBDConsultas]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;                        *
+;=========================
+classBdPg=../class/bd/classBdPg.php
+classConsultas=../class/Bd/classConsultas.php
+consultas=../class/bd/Consultas.php
+
+[rutasAccesoOther]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+classUsuario=../class/Other/classUsuario.php
+
+;[rutasPlugins]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+;js=../class/other/plugins/
+;php=../class/modelo/plugins/
+;css=../estilos/plugins/
+
+[rutasAccesoControlador]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+indexC=../class/controladora/indexC.php
+
+[rutasAccesoVista]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+indexV=../class/vista/indexV.php
+comun=../class/vista/comun.php
+
+[rutasAccesoModelo]
+;=========================
+;  Direcciones de Acceso *
+;   desde la pagina      *
+;=========================
+indexM=../class/modelo/indexM.php
+usuario=../Class/modelo/usuario.php
+[paginas]
+;=========================
+;  Nombre                *
+;  paginas               *
+;                        *
+;=========================
+index=index.php
+
+[baseDatosPgsql]
+;=========================
+;    Variables de        *
+;    Base de Datos       *
+;                        *
+;=========================
+nombrePGL=fomento
+servidorPGL=127.0.0.1
+loginPGL=dev
+clavePGL=dev
+puerto=5432
+
+;[plugins]
+;plugins=export, scalebar, transparency
+
+
+
+[servidor]
+;=========================
+;    Variables del       *
+;    Servidor            *
+;                        *
+;=========================
+direccionIP=127.0.0.1
+direccionServidor=http://127.0.0.1/fomento/paginas/
+
+
+[error]
+nombreLog=error.log
+direccionLog=C:\serverapache\dev\fomento\log\\
+

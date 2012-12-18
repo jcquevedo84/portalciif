@@ -1,0 +1,61 @@
+// a continuacion creamos la fecha en la variable date
+function fecha()
+{
+	var today = new Date()
+	var fech;
+	//document.write('fecha');
+	// Luego le sacamos los datos año, dia, mes 
+	// y numero de dia de la variable date
+	var ano = today.getFullYear()
+	var dia = today.getDay()
+	var mes = today.getMonth()
+	var ndia = today.getDate()
+	//Como los dias de la semana vienen con numeros
+	//reemplazamos estos por el dia correspondiente
+	if (dia==0) {var dia="Domingo"}
+	if (dia==1) {var dia="Lunes"}
+	if (dia==2) {var dia="Martes"}
+	if (dia==3) {var dia="Mi&eacute;rcoles"}
+	if (dia==4) {var dia="Jueves"}
+	if (dia==5) {var dia="Viernes"}
+	if (dia==6) {var dia="S&aacute;bado"}
+	//Y hacemos lo mismo con los meses
+	if (mes==0) {var mes="enero"}
+	if (mes==1) {var mes="febrero"}
+	if (mes==2) {var mes="marzo"}
+	if (mes==3) {var mes="abril"}
+	if (mes==4) {var mes="mayo"}
+	if (mes==5) {var mes="junio"}
+	if (mes==6) {var mes="julio"}
+	if (mes==7) {var mes="agosto"}
+	if (mes==8) {var mes="septiembre"}
+	if (mes==9) {var mes="octubre"}
+	if (mes==10) {var mes="noviembre"}
+	if (mes==11) {var mes="diciembre"}
+	//juntamos todos los datos en una variable
+	//if(ano<1000) ano+=1900
+	fech = dia + ", " + ndia + " de " + mes + " del " + ano;
+	//y procedemos a escribir dicha fecha
+	//fech = dia
+	document.write (fech);
+}
+
+function Hora()
+{
+	var curDateTime = new Date()
+  	var curHour = curDateTime.getHours()
+  	var curMin = curDateTime.getMinutes()
+  	var curSec = curDateTime.getSeconds()
+  	var curAMPM = " AM"
+  	var curTime = ""
+  	if (curHour >= 12){
+    	curHour -= 12
+    	curAMPM = " PM"
+    }
+  	if (curHour == 0) curHour = 12
+  	curTime = curHour + ":" 
+    	+ ((curMin < 10) ? "0" : "") + curMin + ":" 
+    	+ ((curSec < 10) ? "0" : "") + curSec 
+    	+ curAMPM
+  	document.write(curTime)
+}
