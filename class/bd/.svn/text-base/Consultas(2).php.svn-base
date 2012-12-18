@@ -1,0 +1,855 @@
+<?php
+/**
+*LPAIS Consultas
+*
+*Archivo donde se configuran todas las consultas a la base de datos
+*En este archivo estan contenidas todas aquellas variables gloabales al sistema Web
+*@copyright Instituto de Ingenieria CPDI
+*@author Juan Carlos Rodriguez - Jesus Rodriguez - Rosa Aguilar
+*@version 1.0
+*@package Consultas
+*/
+
+/**
+*
+*Contiene todas las consultas que se realizaran en la aplicación.
+*En caso de que la consulta fuera de insercion o actualizaciónen el index campos 0=>array( 'CAMPO'=>'a.fechaexp','VALOR'=>'')
+*array[]=array[nombrePagina]=array[campos] es un array que contiene todos los campos a seleccionar, eliminar o modificar en la consulta
+*		 					 array[tablas] son las tablas a las cuales se le aplicara la consulta
+							 array[condicion]= es un array que contiene los valores que se tomara en las condicion de la consulta, pueden ser varias condiciones
+							 				   array[CAMPO] es el campos a la cual se aplicar ala condición.
+							 				   array[OPERADORR] es el operador de relacion =,<,>,<=,>=,!=
+							 				   array[OPERADORL] en el operador logico and, or, not
+							 				   array[VALOR] Es el valor que tomara la condición.
+							 array[orden]=	 Es un array que contien el orden en que se presentara la consulta  
+							 				   array[CAMPO] es el nombre del campo
+							 				   array[ORD] es el orden en que aparecera desc, asc.
+*@global array $Consulta registroSolicitanteM
+*@name $Consulta
+*/
+$Consulta=array(
+					'admonM'=>array(
+										'consultar_usuario'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''
+										),
+										'consultar_docIdentidad'=>array(
+															'campos'=>array('docidentidad'),
+										       				'tablas'=>array('lp_usuarios'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'docidentidad','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerInstitucion'=>array(
+															'campos'=>array(' * '),
+										       				'tablas'=>array('lp_instituciones'),
+										    				'condicion'=>'',
+										        			'orden'=>array(
+										        							0=>array('CAMPO'=>'institucion','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerEstados'=>array(
+															'campos'=>array('*'),
+										       				'tablas'=>array('lp_estados'),
+										    				'condicion'=>'',
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'estado','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerDepartamentos'=>array(
+															'campos'=>array('coddepartamento,siglas'),
+										       				'tablas'=>array('lp_departamentos'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'siglas','ORD'=>'ASC'),
+										        								1=>array('CAMPO'=>'departamento','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerSupervisores'=>array(
+															'campos'=>array('docidentidad,nombre'),
+										       				'tablas'=>array('lp_usuarios'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'responsable','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    								   	1=>array( 'CAMPO'=>'coddepartamento','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'nombre','ORD'=>'ASC')
+																	      )
+										),
+										'consultar_usuario_pass'=>array(
+															'campos'=>array('a.login, a.nombre,a.codtipousuario,b.institucion, c.departamento,a.email'),
+										       				'tablas'=>array('lp_usuarios as a','lp_instituciones as b','lp_departamentos as c'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    								   	1=>array( 'CAMPO'=>'password','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    								   	2=> ARRAY ('CAMPO' =>'a.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'b.codinstitucion'),
+										    								   	3=> ARRAY ('CAMPO' =>'a.coddepartamento', 'OPERADORR'=>'=' ,'OPERADORL'=>'',  'VALOR'=>'c.coddepartamento')
+															   				  ),
+										        			'orden'=>''
+										),
+										'insertarContacto'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'telefono1','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'telefono2','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'fax','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'paginaweb','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'avcalle','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'edifcasa','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'pisonivel','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'oficaptolocal','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'sectorurb','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'parrmunicipio','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'puntoref','VALOR'=>''),
+																			11=>array( 'CAMPO'=>'ciudad','VALOR'=>''),
+																			12=>array( 'CAMPO'=>'codestado','VALOR'=>''),
+																			13=>array( 'CAMPO'=>'codigopostal','VALOR'=>''),
+																			14=>array( 'CAMPO'=>'apartadopostal','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_contactos')
+										),
+										'consultarNewCodContacto'=>array(
+															'campos'=>array('codcontacto'),
+										       				'tablas'=>array('lp_contactos'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'oid','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'insertarInstitucion'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'rif','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'institucion','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'codcontacto','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'siglas','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_instituciones')
+										),
+										'consultarNewCodInstitucion'=>array(
+															'campos'=>array('codinstitucion'),
+										       				'tablas'=>array('lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'oid','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'consultarContactoInstitucion'=>array(
+															'campos'=>array('codcontacto'),
+										       				'tablas'=>array('lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'insertarDepartamento'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'codinstitucion','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'departamento','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'codcontacto','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'siglas','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_departamentos')
+										),
+										'consultarNewCodDepartamento'=>array(
+															'campos'=>array('coddepartamento'),
+										       				'tablas'=>array('lp_departamentos'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'oid','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'insertarUsuario'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'login','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'password','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'codtipousuario','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'docidentidad','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'cargo','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'coddepartamento','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'codsupervisor','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'responsable','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'telefono1','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'telefono2','VALOR'=>''),
+																			11=>array( 'CAMPO'=>'email','VALOR'=>''),
+																			12=>array( 'CAMPO'=>'emailalt','VALOR'=>''),
+																			13=>array( 'CAMPO'=>'codinstitucion','VALOR'=>''),
+																			14=>array( 'CAMPO'=>'estado','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_usuarios')
+										),
+										'insertarTar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'descripcion','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'estado','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_tarea')
+										),
+										'insertarProd'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'descripcion','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'estado','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_producto')
+										),
+										'insertarTarProd'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'idproducto','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idtarea','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'descripcion','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'estado','VALOR'=>'')
+																			),
+															'tablas'=>array($ini.'lp_producto_tarea')
+										),
+										'consultarNewUsuario'=>array(
+															'campos'=>array('login'),
+										       				'tablas'=>array('lp_usuarios'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerOperadores'=>array(
+															'campos'=>array('a.login','a.nombre', 'b.tipousuario', 'a.estado'),
+										       				'tablas'=>array('lp_usuarios as a', 'lp_tiposusuario as b'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.codtipousuario','OPERADORR'=>'=','OPERADORL'=>' and ','VALOR'=>'b.codtipousuario'),
+										    									1=>array( 'CAMPO'=>'a.codtipousuario','OPERADORR'=>'!=','OPERADORL'=>'','VALOR'=>'sol')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerOperador'=>array(
+															'campos'=>array('a.login','a.password', 'a.codtipousuario', 'b.tipousuario', 'a.docidentidad', 'a.nombre', 'a.cargo', 'a.telefono1', 'a.telefono2', 'a.email', 'a.emailalt', 'a.estado'),
+										       				'tablas'=>array('lp_usuarios as a', 'lp_tiposusuario as b'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.login','OPERADORR'=>'=','OPERADORL'=>' and ','VALOR'=>''),
+										    									1=>array( 'CAMPO'=>'a.codtipousuario','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'b.codtipousuario')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerTipoOperador'=>array(
+															'campos'=>array('a.codtipousuario','a.tipousuario'),
+										       				'tablas'=>array('lp_tiposusuario as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.codtipousuario','OPERADORR'=>'!=','OPERADORL'=>'','VALOR'=>'sol')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.tipousuario','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerUsuario'=>array(
+															'campos'=>array('a.login', 'a.nombre', 'b.institucion', 'c.departamento', 'a.estado'),
+										       				'tablas'=>array('lp_usuarios as a', 'lp_instituciones as b', 'lp_departamentos as c'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.codtipousuario','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'sol'),
+										    									1=>array( 'CAMPO'=>'a.codinstitucion','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.codinstitucion'),
+										    									2=>array( 'CAMPO'=>'a.coddepartamento','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'c.coddepartamento')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerUsuarioII'=>array(
+															'campos'=>array('a.login', 'a.docidentidad', 'a.nombre', 'a.cargo', 'a.telefono1', 'a.telefono2', 'a.email', 'a.emailalt', 'a.codinstitucion', 'b.institucion', 'a.coddepartamento', 'c.departamento', 'd.nombre'),
+										       				'tablas'=>array('lp_usuarios as a left outer join lp_usuarios as d on (a.codsupervisor=d.docidentidad)', 'lp_instituciones as b', 'lp_departamentos as c'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.login','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    									1=>array( 'CAMPO'=>'a.codinstitucion','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.codinstitucion'),
+										    									2=>array( 'CAMPO'=>'a.coddepartamento','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'c.coddepartamento')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerTareas'=>array(
+															'campos'=>array('a.idtarea','a.nombre', 'a.descripcion','a.estado'),
+										       				'tablas'=>array('lp_tarea as a'),
+										    				'condicion'=>'',
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerTareasII'=>array(
+															'campos'=>array('a.nombre', 'a.descripcion'),
+										       				'tablas'=>array('lp_tarea as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerTareasIII'=>array(
+															'campos'=>array('a.idtarea', 'a.nombre'),
+										       				'tablas'=>array('lp_tarea as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'t')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerProductos'=>array(
+															'campos'=>array('a.idproducto','a.nombre', 'a.descripcion','a.estado'),
+										       				'tablas'=>array('lp_producto as a'),
+										    				'condicion'=>'',
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerProductosII'=>array(
+															'campos'=>array('a.nombre', 'a.descripcion'),
+										       				'tablas'=>array('lp_producto as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idproducto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerProductosIII'=>array(
+															'campos'=>array('a.idproducto', 'a.nombre'),
+										       				'tablas'=>array('lp_producto as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'t')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerProductoTarea'=>array(
+															'campos'=>array('a.idproducto','a.idtarea'),
+										       				'tablas'=>array('lp_producto_tarea as a'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idproducto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    									1=>array( 'CAMPO'=>'a.idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										),
+										'obtenerProductoTareaII'=>array(
+															'campos'=>array('a.id_producto_tarea','a.nombre','a.descripcion','b.nombre as Producto','c.nombre as Tarea','a.estado'),
+										       				'tablas'=>array('lp_producto_tarea as a','lp_producto as b','lp_tarea as c'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idproducto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+										    									1=>array( 'CAMPO'=>'a.idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'c.idtarea')
+															   				  ),
+										        			'orden'=>array(
+										        								0=>array('CAMPO'=>'a.nombre','ORD'=>'ASC')
+																	      )
+										),
+										'obtenerProductoTareaIII'=>array(
+															'campos'=>array('a.id_producto_tarea','a.nombre','a.descripcion','a.idproducto','b.nombre','a.idtarea','c.nombre','a.estado'),
+										       				'tablas'=>array('lp_producto_tarea as a','lp_producto as b', 'lp_tarea as c'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.id_producto_tarea','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    									1=>array( 'CAMPO'=>'a.idproducto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+										    									2=>array( 'CAMPO'=>'a.idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'c.idtarea')
+															   				  ),
+										        			'orden'=>''
+										),
+										 'actualizaTarea'=>array('campos'=>array(0=>array('CAMPO'=>'nombre','VALOR'=>''),
+										 										1=>array('CAMPO'=>'descripcion','VALOR'=>'')),
+										       						'tablas'=>array('lp_tarea'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+											'actualizaProducto'=>array('campos'=>array(0=>array('CAMPO'=>'nombre','VALOR'=>''),
+										 										1=>array('CAMPO'=>'descripcion','VALOR'=>'')),
+										       						'tablas'=>array('lp_producto'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'idproducto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+											'actualizaProductoII'=>array('campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>'')),
+										       						'tablas'=>array('lp_producto'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'idproducto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+											'actualizaTareaII'=>array('campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>'')),
+										       						'tablas'=>array('lp_tarea'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'idtarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaTareaProducto'=>array('campos'=>array(0=>array('CAMPO'=>'idproducto','VALOR'=>''),
+										 										1=>array('CAMPO'=>'idtarea','VALOR'=>''),
+										 										2=>array('CAMPO'=>'nombre','VALOR'=>''),
+										 										3=>array('CAMPO'=>'descripcion','VALOR'=>'')),
+										       						'tablas'=>array('lp_producto_tarea'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'id_producto_tarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaTareaProductoII'=>array('campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>'')),
+										       						'tablas'=>array('lp_producto_tarea'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'id_producto_tarea','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaOperadorII'=>array('campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>'')),
+										       						'tablas'=>array('lp_usuarios'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaOperador'=>array('campos'=>array(0=>array('CAMPO'=>'codtipousuario','VALOR'=>''),
+										 										1=>array('CAMPO'=>'nombre','VALOR'=>''),
+										 										2=>array('CAMPO'=>'cargo','VALOR'=>''),
+										 										3=>array('CAMPO'=>'telefono1','VALOR'=>''),
+										 										4=>array('CAMPO'=>'telefono2','VALOR'=>''),
+										 										5=>array('CAMPO'=>'email','VALOR'=>''),
+										 										6=>array('CAMPO'=>'emailalt','VALOR'=>'')
+										 										),
+										       						'tablas'=>array('lp_usuarios'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaUsuario'=>array('campos'=>array(0=>array('CAMPO'=>'nombre','VALOR'=>''),
+										 										1=>array('CAMPO'=>'cargo','VALOR'=>''),
+										 										2=>array('CAMPO'=>'telefono1','VALOR'=>''),
+										 										3=>array('CAMPO'=>'telefono2','VALOR'=>''),
+										 										4=>array('CAMPO'=>'email','VALOR'=>''),
+										 										5=>array('CAMPO'=>'emailalt','VALOR'=>'')
+										 										),
+										       						'tablas'=>array('lp_usuarios'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        					'orden'=>''
+																	),
+										'actualizaPass'=>array('campos'=>array(0=>array('CAMPO'=>'password','VALOR'=>'')),
+										       						'tablas'=>array('lp_usuarios'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')),
+										        					'orden'=>''
+																	),
+										'verUsuario'=>array(
+															'campos'=>array(
+																			'lp_usuarios.login as \"Nombre de usuario\"',
+																			'lp_usuarios.estado as \"Estado\"',
+																			'lp_usuarios.nombre as \"Nombre y Apellido\"',
+																			'lp_usuarios.docidentidad as \"Doc. de Identidad (C.I. o Pasaporte)\"',
+																			'lp_usuarios.cargo as \"Cargo\"',
+																			'lp_usuarios.telefono1 as \"Teléfono directo de oficina\"',
+																			'lp_usuarios.telefono2 as \"Teléfono alternativo\"',
+																			'lp_usuarios.email as \"Correo electrónico\"',
+																			'lp_usuarios.emailalt as \"Correo electrónico alterno\"',
+																			'lp_usuarios.responsable as \"¿Es usted supervisor?\"',
+																			'(SELECT nombre FROM lp_usuarios
+																				WHERE docidentidad = (SELECT codsupervisor FROM lp_usuarios
+																					WHERE login = \'$login\')) as \"Supervisor\"',
+																			'lp_instituciones.institucion as \"Institución\"',
+																			'lp_instituciones.siglas as \"Siglas Institución\"',
+																			'lp_departamentos.departamento as \"Departamento\"',
+																			'lp_departamentos.siglas as \"Siglas Departamento\"'
+																		   ),
+										       				'tablas'=>array('lp_usuarios','lp_departamentos','lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_usuarios.login','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    									1=>array( 'CAMPO'=>'lp_usuarios.coddepartamento','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_departamentos.coddepartamento'),
+										    									2=>array( 'CAMPO'=>'lp_departamentos.codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'lp_instituciones.codinstitucion')
+															   				  ),
+										        			'orden'=>''
+										),
+					),
+					'indexM'=>array(
+										'consultar_usuario'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''),
+										'ordenesEstado'=>array(
+															'campos'=>array('login','idorden','fecha'),
+															'tablas'=>array('lp_orden'),
+															'condicion'=>array(
+																			  ),
+															'orden'=>''),
+										'ordenesProducto'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''),
+										'ordenesInstitucion'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''),
+										'ordenesUsuario'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''),
+										'ordenesOrigen'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''),
+										'ordenesOperador'=>array(
+															'campos'=>array('login'),
+															'tablas'=>array('lp_usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>'')
+									),
+						'principalM'=>array(
+						'obtenerOrden'=>array(
+															'campos'=>array('e.nombre','b.nombre','d.institucion', 'c.descripcion','a.idorden','a.fecha_desde','a.fecha_hasta','a.longitud_min','a.longitud_max','a.latitud_min','a.latitud_max','a. aplicacion','a.modo_entrega','a.fecha'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b','lp_estado as c','lp_instituciones as d','lp_usuarios as e'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+																1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'c.id_estado'),
+																2=> ARRAY ('CAMPO' =>'a.id_funcionario', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'e.login'),
+																3=> ARRAY ('CAMPO' =>'e.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'d.codinstitucion'),
+																4=> ARRAY ('CAMPO' =>'a.idorden', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'')),
+															'orden'=>''),			
+						'obtenerImgs'=>array(
+															'campos'=>array('b.*'),
+															'tablas'=>array('lp_orden as a', 'lp_imagen as b'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idorden'),
+																1=> ARRAY ('CAMPO' =>'a.idorden', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'')),
+															'orden'=>''),
+						'consultarorden'=>array(
+															'campos'=>array('a.idorden', 'a.fecha','b.nombre','d.institucion', 'c.descripcion'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b','lp_estado as c','lp_instituciones as d','lp_usuarios as e'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+																1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'c.id_estado'),
+																2=> ARRAY ('CAMPO' =>'a.id_funcionario', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'e.login'),
+																3=> ARRAY ('CAMPO' =>'e.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'d.codinstitucion')),
+															'orden'=>''),
+						'eliminarOrden'=>array(
+						                                    'campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>'')),
+										 					'tablas'=>array('lp_orden'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idorden','OPERADORR'=>'=','OPERADORL'=>'','')),
+										        			'orden'=>''	),		
+						'consultarcodproducto'=>array(
+															'campos'=>array('a.idorden', 'a.fecha','b.nombre','d.institucion', 'c.descripcion'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b','lp_estado as c','lp_instituciones as d','lp_usuarios as e'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+																1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'c.id_estado'),
+																2=> ARRAY ('CAMPO' =>'a.id_funcionario', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'e.login'),
+																3=> ARRAY ('CAMPO' =>'e.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'d.codinstitucion')),
+															'orden'=>''),
+															
+						'consultarcodestado'=>array(
+															'campos'=>array('id_estado'),
+															'tablas'=>array('lp_estado'),
+															'condicion'=>array(
+					 											0=> ARRAY ('CAMPO' =>'descripcion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'')),
+															'orden'=>''),
+						'consultarcodproducto'=>array(
+															'campos'=>array('idproducto'),
+															'tablas'=>array('lp_producto'),
+															'condicion'=>array(
+					 											0=> ARRAY ('CAMPO' =>'nombre', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'')),
+															'orden'=>''),
+												
+						'consultarcodorigen'=>array(
+															'campos'=>array('idorigen'),
+															'tablas'=>array('lp_origen'),
+															'condicion'=>array(
+					 											0=> ARRAY ('CAMPO' =>'descripcion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'')),
+															'orden'=>''),
+																																								
+						'consultarorden_conusuario'=>array(
+															'campos'=>array('a.idorden', 'a.fecha','b.nombre','d.institucion', 'e.nombre'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b','lp_estado as c','lp_instituciones as d','lp_usuarios as e'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+																1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'c.id_estado'),
+																2=> ARRAY ('CAMPO' =>'a.id_funcionario', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'e.login'),
+																3=> ARRAY ('CAMPO' =>'e.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'d.codinstitucion')),
+															'orden'=>''),						
+																									
+						'consultar_origen'=>array(
+															'campos'=>array('a.idorden', 'a.fecha', 'b.descripcion', 'a.idorigen','a.estado'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b' ),
+															'condicion'=>array(
+																0=>array( 'CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.id_producto')
+															//	1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=>'',  'VALOR'=>'c.id_estado'),
+																//2=> array ('CAMPO' =>'a.id_institucion', 'OPERADORR'=>'=' ,'OPERADORL'=>'',  'VALOR'=>'d.codinstitucion'),
+																  ),
+															'orden'=>''),
+						'consultar_tareas'=>array(
+															'campos'=>array('a.id', 'a.idorden,fecha',  'b.nombre', 'c.descripcion'),
+															'tablas'=>array('lp_orden_trabajo as a','lp_tarea as b', 'lp_estado as c'),
+															'condicion'=>array(
+																0=>array( 'CAMPO'=>'a.id_producto_tarea','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idtarea'),
+																1=> array ('CAMPO' =>'a.idestado', 'OPERADORR'=>'=' ,'OPERADORL'=> '',  'VALOR'=>'c.id_estado')
+															 ),
+															'orden'=>''),														
+											
+						'consultar_orden_usuario'=>array(
+														'campos'=>array('a.idorden', 'a.fecha','b.nombre', 'e.nombre','c.descripcion'),
+															'tablas'=>array('lp_orden as a', 'lp_producto as b','lp_estado as c','lp_instituciones as d','lp_usuarios as e'),
+															'condicion'=>array(
+																0=> array ('CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'b.idproducto'),
+																1=> array ('CAMPO' =>'a.estado', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'c.id_estado'),
+																2=> ARRAY ('CAMPO' =>'a.id_funcionario', 'OPERADORR'=>'=' ,'OPERADORL'=>' AND ',  'VALOR'=>'e.login'),
+																3=> ARRAY ('CAMPO' =>'e.codinstitucion', 'OPERADORR'=>'=' ,'OPERADORL'=>' ',  'VALOR'=>'d.codinstitucion')),
+															'orden'=>''),
+						'obtener_tareas_orden'=>array(
+														'campos'=>array('b.id_producto_tarea', 'b.nombre'),
+														'tablas'=>array('lp_orden as a', 'lp_producto_tarea as b'),
+														'condicion'=>array(
+																0=> array ('CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+																1=> array ('CAMPO' =>'a.id_producto', 'OPERADORR'=>'=' ,'OPERADORL'=> '',  'VALOR'=>'b.idproducto')
+																),
+														'orden'=>'b.nombre'
+														),
+						'insertarOrdenTrabajo'=>array(
+														'campos'=>array(
+											   								0=>array( 'CAMPO'=>'idoperador','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'detalles','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idorden','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'id_producto_tarea','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'fecha','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'idestado','VALOR'=>'')
+																			),
+														'tablas'=>array('lp_orden_trabajo')
+												),
+							'actualizaEstadoOrden'=>array('campos'=>array(0=>array('CAMPO'=>'estado','VALOR'=>''),
+																		  1=>array('CAMPO'=>'observaciones','VALOR'=>'')
+																		  ),
+										       						'tablas'=>array('lp_orden'),
+										    					 'condicion'=>array(0=>array( 'CAMPO'=>'idorden','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						)
+																	),
+							'consultar_Tareas_OrdenTrab'=>array(
+														'campos'=>array('distinct on (a.id_producto_tarea) a.id_producto_tarea', 'b.nombre', 'a.idestado', 'c.descripcion'),
+														'tablas'=>array('lp_orden_trabajo as a', 'lp_producto_tarea as b','lp_estado as c'),
+														'condicion'=>array(
+																0=> array ('CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+																1=> array ('CAMPO' =>'a.id_producto_tarea', 'OPERADORR'=>'=' ,'OPERADORL'=> ' AND ',  'VALOR'=>'b.id_producto_tarea'),
+																2=> array ('CAMPO' =>'a.idestado', 'OPERADORR'=>'=' ,'OPERADORL'=> '',  'VALOR'=>'c.id_estado')
+																),
+														'orden'=>array(
+										        						0=>array('CAMPO'=>'a.id_producto_tarea','ORD'=>'ASC'),
+										        						1=>array('CAMPO'=>'a.fecha','ORD'=>'DESC')
+																	  )
+														),
+								'obtener_estado_orden'=>array(
+														'campos'=>array('a.estado','a.id_funcionario','b.nombre','a.fecha'),
+														'tablas'=>array('lp_orden as a','lp_usuarios as b'),
+														'condicion'=>array(
+																0=> array ('CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+																1=> array ('CAMPO'=>'a.id_funcionario','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'b.login')
+																),
+														'orden'=>''
+														)
+						),
+	'recordarpassM'=>array(
+										'consultarPass'=>array(
+															'campos'=>array('login','password','nombre','email','emailalt'),
+										       				'tablas'=>array('lp_usuarios'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),
+										    								   	1=>array( 'CAMPO'=>'docidentidad','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''	)
+									),
+					
+'reportesM'=>array(
+                   'solRecibidasEdo'=>array(
+															'campos'=>array('lp_estado.descripcion','count(lp_orden.idorden)'),
+										       				'tablas'=>array('lp_orden','lp_estado'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_orden.estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'lp_estado.id_estado')
+										    								   ),
+										    				'orden'=>''	),
+					'solRecibidasInstitucion'=>array(
+															'campos'=>array('lp_instituciones.institucion as Institución','count(lp_orden.idorden)'),
+										       				'tablas'=>array('lp_orden','lp_estado','lp_usuarios','lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_orden.id_funcionario','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_usuarios.login'),
+										    								   	1=>array( 'CAMPO'=>'lp_usuarios.codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'lp_instituciones.codinstitucion')
+															   				  ),
+										    				'orden'=>''	),
+										    					
+						'solRecibidasFii'=>array(
+															'campos'=>array('lp_producto.nombre as Producto','count(lp_orden.idorden) as Ordenes'),
+										       				'tablas'=>array('lp_orden','lp_producto','lp_usuarios','lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_instituciones.institucion','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>''),					
+										    									1=>array( 'CAMPO'=>'lp_orden.id_funcionario','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_usuarios.login'),
+										    								   	2=>array( 'CAMPO'=>'lp_usuarios.codinstitucion','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_instituciones.codinstitucion'),
+			                                                                    3=>array( 'CAMPO'=>'lp_orden.id_producto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'lp_producto.idproducto')
+										    								   	
+															   				  ),
+										    				'orden'=>'Mes'	),				    				
+						'solRecibidasMes'=>array(
+															'campos'=>array('EXTRACT(MONTH FROM lp_orden.fecha)as Mes','count(lp_orden.idorden) as Ordenes'),
+										       				'tablas'=>array('lp_orden'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'EXTRACT(YEAR FROM lp_orden.fecha)','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> intval((date('Y'))))
+										    								   ),
+										    				'orden'=>'Mes'),					    				
+						'solRecibidasInstEdo'=>array(
+															'campos'=>array('lp_instituciones.institucion as Institucion','lp_estado.descripcion as Condición','count(lp_orden.idorden) as Ordenes'),
+										       				'tablas'=>array('lp_orden','lp_estado','lp_usuarios','lp_instituciones'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_orden.id_funcionario','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_usuarios.login'),
+										    								   	1=>array( 'CAMPO'=>'lp_usuarios.codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'lp_instituciones.codinstitucion')
+															   				  ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Institucion','ORD'=>'ASC')
+																	      )
+										    				),	
+						'solProductoEdo'=>array(
+															'campos'=>array('lp_producto.nombre as Producto','lp_estado.descripcion as Condición' ,'count(lp_orden.idorden) as Ordenes'),
+										       				'tablas'=>array('lp_orden','lp_estado','lp_producto'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_orden.estado','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=> 'lp_estado.id_estado'),
+										    								    1=>array( 'CAMPO'=>'lp_orden.id_producto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'lp_producto.idproducto')
+										    								   ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Producto','ORD'=>'ASC') ),
+										        									),
+					   'ProdEntregadoMes'=>array(			'campos'=>array(' EXTRACT(MONTH FROM a.fecha)as Mes',' b.nombre as Producto' ,'count(i.id) as Cantidad'),
+										       				'tablas'=>array('lp_orden as a','lp_producto as b','lp_imagen as i'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=> 'i.idorden'),
+										    								    1=>array( 'CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'b.idproducto')
+										    								   ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Mes','ORD'=>'ASC') ),
+										        									),			    				
+						'ProdEntregadoMisionRes'=>array(
+															'campos'=>array('i.resolucion as Resolucion',
+															
+															 'CASE  WHEN i.instrument_mode='."'S'".' or i.instrument_mode='."'I'".' or i.instrument_mode='."'M'".' or i.instrument_mode='."'P'".' THEN '." 'Spot 4' ".
+            													'WHEN i.instrument_mode='."'A'". ' or i.instrument_mode='."'B'". ' or i.instrument_mode='."'X'".' or instrument_mode='."'J'".' THEN' ." 'Spot 5' ".
+            													'ELSE '." 'Sin Informacion' ".'END'.' as Mision ',
+            													'COUNT(lp_orden.idorden) as Ordenes' ),
+										       				'tablas'=>array('lp_imagen as i','lp_orden'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'i.idorden','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'lp_orden.idorden')
+										    								   ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Mision','ORD'=>'ASC') ),
+										        								),	
+						'ProdEntregadoMisionResMes'=>array(
+															'campos'=>array(' EXTRACT(MONTH FROM lp_orden.fecha)as Mes','i.resolucion as Resolucion',
+															'	 CASE  WHEN i.instrument_mode='."'S'".' or i.instrument_mode='."'I'".' or i.instrument_mode='."'M'".' or i.instrument_mode='."'P'".' THEN '." 'Spot 4' ".
+            													'WHEN i.instrument_mode='."'A'". ' or i.instrument_mode='."'B'". ' or i.instrument_mode='."'X'".' or instrument_mode='."'J'".' THEN' ." 'Spot 5' ".
+            													'ELSE '." 'Sin Informacion' ".'END'.' as Mision ',
+            													'COUNT(i.idorden) as Ordenes' ),
+										       				'tablas'=>array('lp_imagen as i','lp_orden'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'i.idorden','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'lp_orden.idorden')
+										    								   ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Mision','ORD'=>'ASC') ),
+										        								),					        								
+										        								
+										        								
+										        								
+	   								
+						'ProdEntregInstitucion'=>array(
+															'campos'=>array('d.institucion as Institucion' ,'b.nombre as Producto','count(i.id) as Cantidad'),
+										       				'tablas'=>array('lp_orden as a','lp_producto as b','lp_usuarios as c','lp_imagen as i','lp_instituciones as d'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'a.idorden','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=> 'i.idorden'),
+										    								    1=>array( 'CAMPO'=>'a.id_producto','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'b.idproducto'),
+										    									1=>array( 'CAMPO'=>'a.id_funcionario','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'c.login'),
+										    									1=>array( 'CAMPO'=>'d.codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=> 'c.codinstitucion')					    
+										    								   ),
+										    				'orden'=>array(
+										        								0=>array('CAMPO'=>'Institucion','ORD'=>'ASC') ),
+										    				),				        								
+										        											    						    				
+						'solRecibidasInstProducto'=>array(
+															'campos'=>array('lp_instituciones.institucion as Institución','lp_producto.nombre as Producto','count(lp_orden.idorden) as Ordenes'),
+										       				'tablas'=>array('lp_orden','lp_estado','lp_usuarios','lp_instituciones','lp_producto'),
+										    				'condicion'=>array(
+										    									0=>array( 'CAMPO'=>'lp_orden.id_funcionario','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_usuarios.login'),
+										    								   	1=>array( 'CAMPO'=>'lp_producto.idproducto','OPERADORR'=>'=','OPERADORL'=>' AND ','VALOR'=>'lp_orden.id_producto'),
+										    									2=>array( 'CAMPO'=>'lp_usuarios.codinstitucion','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'lp_instituciones.codinstitucion')
+										    								   	
+															   				  ),
+										    				'orden'=>''	),
+										    									    							    				
+										    				
+										    				
+										    				
+                   
+                   ),									
+'catalogoM'=>array(
+                   'insertarOrden'=>array(
+                               					'campos'=>array(
+											   								0=>array( 'CAMPO'=>'unique_id','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'fecha_desde','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'fecha_hasta','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'longitud_min','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'longitud_max','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'latitud_min','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'latitud_max','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'aplicacion','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'modo_entrega','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'comentario','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'fecha','VALOR'=>''),
+																			11=>array( 'CAMPO'=>'id_funcionario','VALOR'=>''),
+																			12=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																			13=>array( 'CAMPO'=>'id_producto','VALOR'=>''),
+																			14=>array( 'CAMPO'=>'idorigen','VALOR'=>'')
+																			),
+													'tablas'=>array('lp_orden')
+										),
+						'insertarImagen'=>array(
+                               					'campos'=>array(
+											   								0=>array( 'CAMPO'=>'idimagen','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'nw_lat','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'nw_lon','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'ne_lat','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'ne_lon','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'sw_lat','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'sw_lon','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'se_lat','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'se_lon','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'cloud_quotes','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'num_path_k','VALOR'=>''),
+																			11=>array( 'CAMPO'=>'num_raw_j','VALOR'=>''),
+																			12=>array( 'CAMPO'=>'incidence_ang','VALOR'=>''),
+																			13=>array( 'CAMPO'=>'centre_lat','VALOR'=>''),
+																			14=>array( 'CAMPO'=>'centre_lon','VALOR'=>''),
+																			15=>array( 'CAMPO'=>'lower_browse_file_id','VALOR'=>''),
+																			16=>array( 'CAMPO'=>'upper_browse_file_id','VALOR'=>''),
+																			17=>array( 'CAMPO'=>'sat_idt','VALOR'=>''),
+																			18=>array( 'CAMPO'=>'idorden','VALOR'=>''),
+																			19=>array( 'CAMPO'=>'instrument_mode','VALOR'=>''),
+																			20=>array( 'CAMPO'=>'nivelprocesamiento','VALOR'=>''),
+																			21=>array( 'CAMPO'=>'thumbnail_file_id','VALOR'=>''),
+																			22=>array( 'CAMPO'=>'resolucion','VALOR'=>''),
+																			23=>array( 'CAMPO'=>'begin_board_date','VALOR'=>'')
+																			),
+													'tablas'=>array('lp_imagen')
+													),
+						'consultar_codOrden'=>array(
+															'campos'=>array('idorden'),
+										       				'tablas'=>array('lp_orden'),
+										    				'condicion'=> array(
+										    									0=>array( 'CAMPO'=>'oid','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   				  ),
+										        			'orden'=>''
+										)
+														
+					)
+)
+?>

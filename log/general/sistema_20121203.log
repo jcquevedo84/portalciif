@@ -1,0 +1,3 @@
+12/03/12 05:38:41,885 [3916] INFO root - El usuario con id: 1 y nombre:  registro una vulnerabilidad desde la ip: 127.0.0.1. En el MODULO: vulnerabilidades CLASE: vulnerabilidadesM FUNCION: guardar LINEA: 75
+12/03/12 05:39:56,921 [3916] INFO root - El usuario con id: 1 y nombre:  registro una vulnerabilidad desde la ip: 127.0.0.1. En el MODULO: vulnerabilidades CLASE: vulnerabilidadesM FUNCION: guardar LINEA: 75
+12/03/12 05:40:04,955 [3916] INFO root - El usuario con id: 1 y nombre:  registro una vulnerabilidad desde la ip: 127.0.0.1. En el MODULO: vulnerabilidades CLASE: vulnerabilidadesM FUNCION: guardar LINEA: 75

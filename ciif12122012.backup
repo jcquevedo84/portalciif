@@ -1,0 +1,1555 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.6
+-- Dumped by pg_dump version 9.1.6
+-- Started on 2012-12-12 06:57:36
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 6 (class 2615 OID 19576)
+-- Name: auditoria; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA auditoria;
+
+
+ALTER SCHEMA auditoria OWNER TO postgres;
+
+--
+-- TOC entry 1962 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: SCHEMA auditoria; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA auditoria IS 'Este modulo almacena los cambios de todos los modulos del proyecto de pasantia';
+
+
+--
+-- TOC entry 7 (class 2615 OID 19577)
+-- Name: autenticacion; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA autenticacion;
+
+
+ALTER SCHEMA autenticacion OWNER TO postgres;
+
+--
+-- TOC entry 8 (class 2615 OID 19578)
+-- Name: biblioteca; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA biblioteca;
+
+
+ALTER SCHEMA biblioteca OWNER TO postgres;
+
+--
+-- TOC entry 1963 (class 0 OID 0)
+-- Dependencies: 8
+-- Name: SCHEMA biblioteca; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA biblioteca IS 'Es el esquema que guarda el modulo de bilioteca';
+
+
+--
+-- TOC entry 9 (class 2615 OID 19579)
+-- Name: proyectos; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA proyectos;
+
+
+ALTER SCHEMA proyectos OWNER TO postgres;
+
+--
+-- TOC entry 1964 (class 0 OID 0)
+-- Dependencies: 9
+-- Name: SCHEMA proyectos; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA proyectos IS 'Es el esquema que guarda el modulo de proyectos';
+
+
+--
+-- TOC entry 10 (class 2615 OID 19580)
+-- Name: vulnerabilidades; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA vulnerabilidades;
+
+
+ALTER SCHEMA vulnerabilidades OWNER TO postgres;
+
+--
+-- TOC entry 1967 (class 0 OID 0)
+-- Dependencies: 10
+-- Name: SCHEMA vulnerabilidades; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA vulnerabilidades IS 'Es el modulo de Vulnerabilidades';
+
+
+--
+-- TOC entry 184 (class 3079 OID 11639)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1968 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = autenticacion, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 166 (class 1259 OID 19581)
+-- Dependencies: 1907 1908 7
+-- Name: aplicaciones; Type: TABLE; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE aplicaciones (
+    id integer NOT NULL,
+    nombre text,
+    descripcion text,
+    estado boolean DEFAULT true NOT NULL,
+    idu integer,
+    fechat time without time zone DEFAULT now(),
+    ip character varying(15)
+);
+
+
+ALTER TABLE autenticacion.aplicaciones OWNER TO postgres;
+
+--
+-- TOC entry 1969 (class 0 OID 0)
+-- Dependencies: 166
+-- Name: COLUMN aplicaciones.idu; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN aplicaciones.idu IS 'Es el id de quien inserto o dmodifico el registro';
+
+
+--
+-- TOC entry 1970 (class 0 OID 0)
+-- Dependencies: 166
+-- Name: COLUMN aplicaciones.fechat; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN aplicaciones.fechat IS 'Es la fecha y hora en que se inserto o modifico el registro';
+
+
+--
+-- TOC entry 1971 (class 0 OID 0)
+-- Dependencies: 166
+-- Name: COLUMN aplicaciones.ip; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN aplicaciones.ip IS 'Es la dirección IP desde donde se inserto o modifico el registro';
+
+
+--
+-- TOC entry 167 (class 1259 OID 19589)
+-- Dependencies: 166 7
+-- Name: aplicaciones_id_seq; Type: SEQUENCE; Schema: autenticacion; Owner: postgres
+--
+
+CREATE SEQUENCE aplicaciones_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE autenticacion.aplicaciones_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1972 (class 0 OID 0)
+-- Dependencies: 167
+-- Name: aplicaciones_id_seq; Type: SEQUENCE OWNED BY; Schema: autenticacion; Owner: postgres
+--
+
+ALTER SEQUENCE aplicaciones_id_seq OWNED BY aplicaciones.id;
+
+
+--
+-- TOC entry 1973 (class 0 OID 0)
+-- Dependencies: 167
+-- Name: aplicaciones_id_seq; Type: SEQUENCE SET; Schema: autenticacion; Owner: postgres
+--
+
+SELECT pg_catalog.setval('aplicaciones_id_seq', 1, false);
+
+
+--
+-- TOC entry 168 (class 1259 OID 19591)
+-- Dependencies: 1910 1911 7
+-- Name: tipo_usuarios; Type: TABLE; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tipo_usuarios (
+    id integer NOT NULL,
+    nombre text,
+    descripcion text,
+    estado boolean DEFAULT true NOT NULL,
+    idu integer,
+    fechat time without time zone DEFAULT now(),
+    ip character varying(15)
+);
+
+
+ALTER TABLE autenticacion.tipo_usuarios OWNER TO postgres;
+
+--
+-- TOC entry 1974 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: COLUMN tipo_usuarios.idu; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN tipo_usuarios.idu IS 'Es el id que inserta el registro';
+
+
+--
+-- TOC entry 1975 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: COLUMN tipo_usuarios.fechat; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN tipo_usuarios.fechat IS 'Es la fecha en que se inserto el registro';
+
+
+--
+-- TOC entry 1976 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: COLUMN tipo_usuarios.ip; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN tipo_usuarios.ip IS 'Es la direccion ip dese donde se inserta el registro';
+
+
+--
+-- TOC entry 169 (class 1259 OID 19599)
+-- Dependencies: 168 7
+-- Name: tipo_usuarios_id_seq; Type: SEQUENCE; Schema: autenticacion; Owner: postgres
+--
+
+CREATE SEQUENCE tipo_usuarios_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE autenticacion.tipo_usuarios_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1977 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: tipo_usuarios_id_seq; Type: SEQUENCE OWNED BY; Schema: autenticacion; Owner: postgres
+--
+
+ALTER SEQUENCE tipo_usuarios_id_seq OWNED BY tipo_usuarios.id;
+
+
+--
+-- TOC entry 1978 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: tipo_usuarios_id_seq; Type: SEQUENCE SET; Schema: autenticacion; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tipo_usuarios_id_seq', 8, true);
+
+
+--
+-- TOC entry 170 (class 1259 OID 19601)
+-- Dependencies: 7
+-- Name: usu_apli_tipo; Type: TABLE; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usu_apli_tipo (
+    id integer NOT NULL,
+    id_usuarios integer NOT NULL,
+    id_aplicaciones integer NOT NULL,
+    id_tipo_usuarios integer NOT NULL,
+    estado boolean NOT NULL
+);
+
+
+ALTER TABLE autenticacion.usu_apli_tipo OWNER TO postgres;
+
+--
+-- TOC entry 171 (class 1259 OID 19604)
+-- Dependencies: 7 170
+-- Name: usu_apli_tipo_id_seq; Type: SEQUENCE; Schema: autenticacion; Owner: postgres
+--
+
+CREATE SEQUENCE usu_apli_tipo_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE autenticacion.usu_apli_tipo_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1979 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: usu_apli_tipo_id_seq; Type: SEQUENCE OWNED BY; Schema: autenticacion; Owner: postgres
+--
+
+ALTER SEQUENCE usu_apli_tipo_id_seq OWNED BY usu_apli_tipo.id;
+
+
+--
+-- TOC entry 1980 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: usu_apli_tipo_id_seq; Type: SEQUENCE SET; Schema: autenticacion; Owner: postgres
+--
+
+SELECT pg_catalog.setval('usu_apli_tipo_id_seq', 1, false);
+
+
+SET default_with_oids = true;
+
+--
+-- TOC entry 172 (class 1259 OID 19606)
+-- Dependencies: 1914 1915 7
+-- Name: usuarios; Type: TABLE; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usuarios (
+    nombre character varying(40),
+    email character varying(40),
+    poo integer,
+    estado boolean DEFAULT true,
+    id integer NOT NULL,
+    codtipousuario integer,
+    fechat time without time zone DEFAULT now(),
+    ip character(50),
+    apellido character varying(40),
+    login character varying(40),
+    password character varying(40),
+    idu integer
+);
+
+
+ALTER TABLE autenticacion.usuarios OWNER TO postgres;
+
+--
+-- TOC entry 1981 (class 0 OID 0)
+-- Dependencies: 172
+-- Name: COLUMN usuarios.apellido; Type: COMMENT; Schema: autenticacion; Owner: postgres
+--
+
+COMMENT ON COLUMN usuarios.apellido IS 'Es el apellido del usuario';
+
+
+--
+-- TOC entry 173 (class 1259 OID 19611)
+-- Dependencies: 7 172
+-- Name: usuarios_id_seq; Type: SEQUENCE; Schema: autenticacion; Owner: postgres
+--
+
+CREATE SEQUENCE usuarios_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE autenticacion.usuarios_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1982 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: usuarios_id_seq; Type: SEQUENCE OWNED BY; Schema: autenticacion; Owner: postgres
+--
+
+ALTER SEQUENCE usuarios_id_seq OWNED BY usuarios.id;
+
+
+--
+-- TOC entry 1983 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: autenticacion; Owner: postgres
+--
+
+SELECT pg_catalog.setval('usuarios_id_seq', 20, true);
+
+
+SET search_path = biblioteca, pg_catalog;
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 174 (class 1259 OID 19613)
+-- Dependencies: 1917 1918 8
+-- Name: biblioteca_software; Type: TABLE; Schema: biblioteca; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE biblioteca_software (
+    id integer NOT NULL,
+    nombre text NOT NULL,
+    descripcion text,
+    link_externo character varying(70),
+    idu integer,
+    fechat time without time zone DEFAULT now(),
+    ip character varying(15),
+    estado boolean DEFAULT true
+);
+
+
+ALTER TABLE biblioteca.biblioteca_software OWNER TO postgres;
+
+--
+-- TOC entry 1984 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: TABLE biblioteca_software; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON TABLE biblioteca_software IS 'Esta tabla almacena los datos de la biblioteca de software';
+
+
+--
+-- TOC entry 1985 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.id; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.id IS 'Es el identificador de la tabla';
+
+
+--
+-- TOC entry 1986 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.nombre; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.nombre IS 'Es el nombre del software';
+
+
+--
+-- TOC entry 1987 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.descripcion; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.descripcion IS 'Es la descripcion del software';
+
+
+--
+-- TOC entry 1988 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.link_externo; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.link_externo IS 'Es el link para descargar el software desde una fuente externa 
+TODO Validar cuantos link se pueden almacenar';
+
+
+--
+-- TOC entry 1989 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.idu; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.idu IS 'Es el id de la persona que realizó la inserto o modifico el registro';
+
+
+--
+-- TOC entry 1990 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.fechat; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.fechat IS 'Es la fecha y hora que se inserto o modifico el registro';
+
+
+--
+-- TOC entry 1991 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.ip; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.ip IS 'Es la dirección ip desde donde se inserta o modifica el registro';
+
+
+--
+-- TOC entry 1992 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: COLUMN biblioteca_software.estado; Type: COMMENT; Schema: biblioteca; Owner: postgres
+--
+
+COMMENT ON COLUMN biblioteca_software.estado IS 'Es el estado del registro';
+
+
+--
+-- TOC entry 175 (class 1259 OID 19621)
+-- Dependencies: 8 174
+-- Name: biblioteca_software_id_seq; Type: SEQUENCE; Schema: biblioteca; Owner: postgres
+--
+
+CREATE SEQUENCE biblioteca_software_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE biblioteca.biblioteca_software_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 1993 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: biblioteca_software_id_seq; Type: SEQUENCE OWNED BY; Schema: biblioteca; Owner: postgres
+--
+
+ALTER SEQUENCE biblioteca_software_id_seq OWNED BY biblioteca_software.id;
+
+
+--
+-- TOC entry 1994 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: biblioteca_software_id_seq; Type: SEQUENCE SET; Schema: biblioteca; Owner: postgres
+--
+
+SELECT pg_catalog.setval('biblioteca_software_id_seq', 29, true);
+
+
+SET search_path = proyectos, pg_catalog;
+
+--
+-- TOC entry 176 (class 1259 OID 19623)
+-- Dependencies: 1920 1921 9
+-- Name: actividades; Type: TABLE; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE actividades (
+    id integer NOT NULL,
+    nombre text,
+    descripcion text NOT NULL,
+    fecha date,
+    idu integer,
+    fechat time without time zone DEFAULT now() NOT NULL,
+    estado boolean DEFAULT true NOT NULL,
+    ip character varying(15) NOT NULL,
+    id_proyecto integer NOT NULL
+);
+
+
+ALTER TABLE proyectos.actividades OWNER TO postgres;
+
+--
+-- TOC entry 1995 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: TABLE actividades; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON TABLE actividades IS 'En esta tabla se almacenaran las actividades que ejecutan las personas sobre el proyecto';
+
+
+--
+-- TOC entry 1996 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.id; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.id IS 'Es el identificador de las actividades';
+
+
+--
+-- TOC entry 1997 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.nombre; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.nombre IS 'Es el nombre de la actividad';
+
+
+--
+-- TOC entry 1998 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.descripcion; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.descripcion IS 'Es la descripcion de la actividad';
+
+
+--
+-- TOC entry 1999 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.fecha; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.fecha IS 'Es la fecha en que se realizó la actividad';
+
+
+--
+-- TOC entry 2000 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.idu; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.idu IS 'Es el id del usuario qu erealizo la actividad';
+
+
+--
+-- TOC entry 2001 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.fechat; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.fechat IS 'Es la fecha en que se ejecuto la transaccion sobre el regitro';
+
+
+--
+-- TOC entry 2002 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.estado; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.estado IS 'Es el estado del registro';
+
+
+--
+-- TOC entry 2003 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.ip; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.ip IS 'Es la direccion ip desde don se almaceno el registro';
+
+
+--
+-- TOC entry 2004 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: COLUMN actividades.id_proyecto; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN actividades.id_proyecto IS 'Es el id del proyecto a la cual pertenece la actividad';
+
+
+--
+-- TOC entry 177 (class 1259 OID 19631)
+-- Dependencies: 9 176
+-- Name: actividades_id_seq; Type: SEQUENCE; Schema: proyectos; Owner: postgres
+--
+
+CREATE SEQUENCE actividades_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE proyectos.actividades_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2005 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: actividades_id_seq; Type: SEQUENCE OWNED BY; Schema: proyectos; Owner: postgres
+--
+
+ALTER SEQUENCE actividades_id_seq OWNED BY actividades.id;
+
+
+--
+-- TOC entry 2006 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: actividades_id_seq; Type: SEQUENCE SET; Schema: proyectos; Owner: postgres
+--
+
+SELECT pg_catalog.setval('actividades_id_seq', 1, false);
+
+
+--
+-- TOC entry 178 (class 1259 OID 19633)
+-- Dependencies: 1923 1924 9
+-- Name: proyectos; Type: TABLE; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE proyectos (
+    id integer NOT NULL,
+    nombre text NOT NULL,
+    descripcion text NOT NULL,
+    fecha_creacion date,
+    ip character varying(15),
+    idu integer,
+    estado boolean DEFAULT true NOT NULL,
+    fechat time without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE proyectos.proyectos OWNER TO postgres;
+
+--
+-- TOC entry 2007 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: TABLE proyectos; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON TABLE proyectos IS 'Esta tabla almacenara los datos de los proyectos';
+
+
+--
+-- TOC entry 2008 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.id; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.id IS 'Es el identificador del proyecto';
+
+
+--
+-- TOC entry 2009 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.nombre; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.nombre IS 'Es el nombre del proyecto';
+
+
+--
+-- TOC entry 2010 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.descripcion; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.descripcion IS 'Es la descripción del proyecto';
+
+
+--
+-- TOC entry 2011 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.fecha_creacion; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.fecha_creacion IS 'Es la fecha en que se creo o esta en proceso el proyecto';
+
+
+--
+-- TOC entry 2012 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.ip; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.ip IS 'Es la direccion ip desde donde se creo el proyecto';
+
+
+--
+-- TOC entry 2013 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.idu; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.idu IS 'Es el id del usuario que creo elproyecto';
+
+
+--
+-- TOC entry 2014 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.estado; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.estado IS 'Es el estado del registro';
+
+
+--
+-- TOC entry 2015 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: COLUMN proyectos.fechat; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos.fechat IS 'Es la fecha en se ejecuto la transaccion';
+
+
+--
+-- TOC entry 179 (class 1259 OID 19641)
+-- Dependencies: 9 178
+-- Name: proyectos_id_seq; Type: SEQUENCE; Schema: proyectos; Owner: postgres
+--
+
+CREATE SEQUENCE proyectos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE proyectos.proyectos_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2016 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: proyectos_id_seq; Type: SEQUENCE OWNED BY; Schema: proyectos; Owner: postgres
+--
+
+ALTER SEQUENCE proyectos_id_seq OWNED BY proyectos.id;
+
+
+--
+-- TOC entry 2017 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: proyectos_id_seq; Type: SEQUENCE SET; Schema: proyectos; Owner: postgres
+--
+
+SELECT pg_catalog.setval('proyectos_id_seq', 3, true);
+
+
+--
+-- TOC entry 180 (class 1259 OID 19643)
+-- Dependencies: 1926 1927 9
+-- Name: proyectos_usuario; Type: TABLE; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE proyectos_usuario (
+    id integer NOT NULL,
+    id_proyecto integer NOT NULL,
+    id_usuario integer NOT NULL,
+    ip character varying(15) NOT NULL,
+    idu integer NOT NULL,
+    fechat time without time zone DEFAULT now() NOT NULL,
+    estado boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE proyectos.proyectos_usuario OWNER TO postgres;
+
+--
+-- TOC entry 2018 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: TABLE proyectos_usuario; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON TABLE proyectos_usuario IS 'Esta tabla almacena que usuarios tienen acceso a los proyectos';
+
+
+--
+-- TOC entry 2019 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.id; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.id IS 'Es el id de la tabla';
+
+
+--
+-- TOC entry 2020 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.id_proyecto; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.id_proyecto IS 'Es el identificador de proyectos ';
+
+
+--
+-- TOC entry 2021 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.id_usuario; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.id_usuario IS 'Es el id  del usuario';
+
+
+--
+-- TOC entry 2022 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.ip; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.ip IS 'Este campo almacena la direccion ip de donde se ejecuto la transaccion';
+
+
+--
+-- TOC entry 2023 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.idu; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.idu IS 'Este campo almacena el id del usuario qu eejecuto la transaccion';
+
+
+--
+-- TOC entry 2024 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.fechat; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.fechat IS 'Este campo almacena la fecha de la transaccion';
+
+
+--
+-- TOC entry 2025 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: COLUMN proyectos_usuario.estado; Type: COMMENT; Schema: proyectos; Owner: postgres
+--
+
+COMMENT ON COLUMN proyectos_usuario.estado IS 'Este campo almacena el estado del registro';
+
+
+--
+-- TOC entry 181 (class 1259 OID 19648)
+-- Dependencies: 180 9
+-- Name: proyectos_usuario_id_seq; Type: SEQUENCE; Schema: proyectos; Owner: postgres
+--
+
+CREATE SEQUENCE proyectos_usuario_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE proyectos.proyectos_usuario_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2026 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: proyectos_usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: proyectos; Owner: postgres
+--
+
+ALTER SEQUENCE proyectos_usuario_id_seq OWNED BY proyectos_usuario.id;
+
+
+--
+-- TOC entry 2027 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: proyectos_usuario_id_seq; Type: SEQUENCE SET; Schema: proyectos; Owner: postgres
+--
+
+SELECT pg_catalog.setval('proyectos_usuario_id_seq', 1, false);
+
+
+SET search_path = vulnerabilidades, pg_catalog;
+
+--
+-- TOC entry 182 (class 1259 OID 19650)
+-- Dependencies: 1929 1930 10
+-- Name: vulnerabilidad; Type: TABLE; Schema: vulnerabilidades; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE vulnerabilidad (
+    id integer NOT NULL,
+    nombre text NOT NULL,
+    descripcion text NOT NULL,
+    rt text NOT NULL,
+    fechadetectada date NOT NULL,
+    fechareportada date,
+    responsable text NOT NULL,
+    fechacierre date,
+    tipocaso integer,
+    idu integer,
+    estado boolean DEFAULT true NOT NULL,
+    fechat time with time zone DEFAULT now() NOT NULL,
+    ip character varying(16),
+    idcaso integer,
+    identificador character varying(11)
+);
+
+
+ALTER TABLE vulnerabilidades.vulnerabilidad OWNER TO postgres;
+
+--
+-- TOC entry 2028 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.id; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.id IS 'Es el identificador unico del registro';
+
+
+--
+-- TOC entry 2029 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.nombre; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.nombre IS 'Es el nombre del casoVulnerabilidad';
+
+
+--
+-- TOC entry 2030 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.descripcion; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.descripcion IS 'Es la desripcion del caso de vulnerabilidades';
+
+
+--
+-- TOC entry 2031 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.rt; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.rt IS 'Es el nuemro en el sistema RT';
+
+
+--
+-- TOC entry 2032 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.fechadetectada; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.fechadetectada IS 'Es la fecha en que se detecta la vulnerabilidad';
+
+
+--
+-- TOC entry 2033 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.fechareportada; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.fechareportada IS 'Es la fecha en que es reportada la Vulnerabilidad';
+
+
+--
+-- TOC entry 2034 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.responsable; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.responsable IS 'Es la persona que esta manejando la Vulnerabilidad';
+
+
+--
+-- TOC entry 2035 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.fechacierre; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.fechacierre IS 'Es la fecha en que se cierra el subcaso';
+
+
+--
+-- TOC entry 2036 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.tipocaso; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.tipocaso IS 'Si tiene el valor 1 es un caso y si tiene el valor 2 es un subcaso';
+
+
+--
+-- TOC entry 2037 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.idu; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.idu IS 'Es el Id del usuario que registra la Vulnerabilidad';
+
+
+--
+-- TOC entry 2038 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.estado; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.estado IS 'Es el estado del registro';
+
+
+--
+-- TOC entry 2039 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.fechat; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.fechat IS 'Es la fecha en que se inserto el registro';
+
+
+--
+-- TOC entry 2040 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.ip; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.ip IS 'Es la direcciion ip de donde se registra el caso';
+
+
+--
+-- TOC entry 2041 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.idcaso; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.idcaso IS 'Es el identificador del caso al que esta asociado el subcaso';
+
+
+--
+-- TOC entry 2042 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: COLUMN vulnerabilidad.identificador; Type: COMMENT; Schema: vulnerabilidades; Owner: postgres
+--
+
+COMMENT ON COLUMN vulnerabilidad.identificador IS 'Es el identificador del caso.
+
+Esta formado por ddmmaaaid';
+
+
+--
+-- TOC entry 183 (class 1259 OID 19658)
+-- Dependencies: 182 10
+-- Name: vulnerabilidad_id_seq; Type: SEQUENCE; Schema: vulnerabilidades; Owner: postgres
+--
+
+CREATE SEQUENCE vulnerabilidad_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE vulnerabilidades.vulnerabilidad_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2043 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: vulnerabilidad_id_seq; Type: SEQUENCE OWNED BY; Schema: vulnerabilidades; Owner: postgres
+--
+
+ALTER SEQUENCE vulnerabilidad_id_seq OWNED BY vulnerabilidad.id;
+
+
+--
+-- TOC entry 2044 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: vulnerabilidad_id_seq; Type: SEQUENCE SET; Schema: vulnerabilidades; Owner: postgres
+--
+
+SELECT pg_catalog.setval('vulnerabilidad_id_seq', 61, true);
+
+
+SET search_path = autenticacion, pg_catalog;
+
+--
+-- TOC entry 1909 (class 2604 OID 19712)
+-- Dependencies: 167 166
+-- Name: id; Type: DEFAULT; Schema: autenticacion; Owner: postgres
+--
+
+ALTER TABLE ONLY aplicaciones ALTER COLUMN id SET DEFAULT nextval('aplicaciones_id_seq'::regclass);
+
+
+--
+-- TOC entry 1912 (class 2604 OID 19713)
+-- Dependencies: 169 168
+-- Name: id; Type: DEFAULT; Schema: autenticacion; Owner: postgres
+--
+
+ALTER TABLE ONLY tipo_usuarios ALTER COLUMN id SET DEFAULT nextval('tipo_usuarios_id_seq'::regclass);
+
+
+--
+-- TOC entry 1913 (class 2604 OID 19714)
+-- Dependencies: 171 170
+-- Name: id; Type: DEFAULT; Schema: autenticacion; Owner: postgres
+--
+
+ALTER TABLE ONLY usu_apli_tipo ALTER COLUMN id SET DEFAULT nextval('usu_apli_tipo_id_seq'::regclass);
+
+
+--
+-- TOC entry 1916 (class 2604 OID 19715)
+-- Dependencies: 173 172
+-- Name: id; Type: DEFAULT; Schema: autenticacion; Owner: postgres
+--
+
+ALTER TABLE ONLY usuarios ALTER COLUMN id SET DEFAULT nextval('usuarios_id_seq'::regclass);
+
+
+SET search_path = biblioteca, pg_catalog;
+
+--
+-- TOC entry 1919 (class 2604 OID 19716)
+-- Dependencies: 175 174
+-- Name: id; Type: DEFAULT; Schema: biblioteca; Owner: postgres
+--
+
+ALTER TABLE ONLY biblioteca_software ALTER COLUMN id SET DEFAULT nextval('biblioteca_software_id_seq'::regclass);
+
+
+SET search_path = proyectos, pg_catalog;
+
+--
+-- TOC entry 1922 (class 2604 OID 19717)
+-- Dependencies: 177 176
+-- Name: id; Type: DEFAULT; Schema: proyectos; Owner: postgres
+--
+
+ALTER TABLE ONLY actividades ALTER COLUMN id SET DEFAULT nextval('actividades_id_seq'::regclass);
+
+
+--
+-- TOC entry 1925 (class 2604 OID 19718)
+-- Dependencies: 179 178
+-- Name: id; Type: DEFAULT; Schema: proyectos; Owner: postgres
+--
+
+ALTER TABLE ONLY proyectos ALTER COLUMN id SET DEFAULT nextval('proyectos_id_seq'::regclass);
+
+
+--
+-- TOC entry 1928 (class 2604 OID 19719)
+-- Dependencies: 181 180
+-- Name: id; Type: DEFAULT; Schema: proyectos; Owner: postgres
+--
+
+ALTER TABLE ONLY proyectos_usuario ALTER COLUMN id SET DEFAULT nextval('proyectos_usuario_id_seq'::regclass);
+
+
+SET search_path = vulnerabilidades, pg_catalog;
+
+--
+-- TOC entry 1931 (class 2604 OID 19720)
+-- Dependencies: 183 182
+-- Name: id; Type: DEFAULT; Schema: vulnerabilidades; Owner: postgres
+--
+
+ALTER TABLE ONLY vulnerabilidad ALTER COLUMN id SET DEFAULT nextval('vulnerabilidad_id_seq'::regclass);
+
+
+SET search_path = autenticacion, pg_catalog;
+
+--
+-- TOC entry 1948 (class 0 OID 19581)
+-- Dependencies: 166 1957
+-- Data for Name: aplicaciones; Type: TABLE DATA; Schema: autenticacion; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 1949 (class 0 OID 19591)
+-- Dependencies: 168 1957
+-- Data for Name: tipo_usuarios; Type: TABLE DATA; Schema: autenticacion; Owner: postgres
+--
+
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (1, 'adm', 'administrador', true, NULL, '05:10:59.492', NULL);
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (2, 'vul', 'Registro Vulnerabilidad', true, NULL, '05:10:59.492', NULL);
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (3, 'admvul', 'Administrador Vulnerabilidad', true, NULL, '05:10:59.492', NULL);
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (5, 'ddd', 'ddd', true, 1, '06:23:54.763', '127.0.0.1');
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (6, 'ddd', 'ddd', true, 1, '06:25:16.199', '127.0.0.1');
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (7, 'aaa', 'aaa', false, 1, '06:29:45.782', '127.0.0.1');
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (4, 'ddd', 'ddd', false, 1, '06:22:44.673', '127.0.0.1');
+INSERT INTO tipo_usuarios (id, nombre, descripcion, estado, idu, fechat, ip) VALUES (8, 'uuu', 'uuu', true, 1, '17:10:27.735', '127.0.0.1');
+
+
+--
+-- TOC entry 1950 (class 0 OID 19601)
+-- Dependencies: 170 1957
+-- Data for Name: usu_apli_tipo; Type: TABLE DATA; Schema: autenticacion; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 1951 (class 0 OID 19606)
+-- Dependencies: 172 1957
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: autenticacion; Owner: postgres
+--
+
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('Juan Carlos', 'jcquevedo84@gmail.com', 6789, false, 2, 1, '18:16:47.982', '127.127.127.127                                   ', NULL, NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('Kery Perez', 'kperez15@cantv.com.ve', 1234, true, 1, 1, NULL, NULL, 'hernandez', 'kaph', 'kaph', NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('testAdmin', 'testAdmin@gmail.com', 1234, false, 3, 1, '20:26:07.46', '127.0.0.1                                         ', NULL, NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('pedro', 'perezpedro', 1234, true, 16, 1, '16:12:25.044', '127.0.0.1                                         ', 'perez', NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('testNombre', 'testNombre@gmail.com', 1234, true, 17, 1, '23:12:53.98', '127.0.0.1                                         ', 'testApellido', NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('testNombre', 'testNombre@gmail.com', 1234, true, 18, 1, '23:13:34.683', '127.0.0.1                                         ', 'testApellido', NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('testNombre', 'testNombre@gmail.com', 1234, true, 19, 1, '23:14:30.537', '127.0.0.1                                         ', 'testApellido', NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('testNombre', 'testNombre@gmail.com', 1234, true, 20, 1, '23:15:11.507', '127.0.0.1                                         ', 'testApellido', NULL, NULL, NULL);
+INSERT INTO usuarios (nombre, email, poo, estado, id, codtipousuario, fechat, ip, apellido, login, password, idu) VALUES ('qqq', 'qqq', 12, false, 15, 1, '22:50:41.935', '127.0.0.1                                         ', 'qqq', NULL, NULL, NULL);
+
+
+SET search_path = biblioteca, pg_catalog;
+
+--
+-- TOC entry 1952 (class 0 OID 19613)
+-- Dependencies: 174 1957
+-- Data for Name: biblioteca_software; Type: TABLE DATA; Schema: biblioteca; Owner: postgres
+--
+
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (1, 'software1', 'software1', 'software1', 1, '16:42:50.876', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (2, 'eee', 'eee', 'eee', 1, '16:45:45.709', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (4, 'aaa', 'aaa', 'aaa', 1, '16:51:56.176', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (6, 'ggg', 'ggg', 'ggg', 1, '16:55:04.118', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (7, 'vv', 'vv', 'v', 1, '16:55:23.441', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (8, 'vv', 'vv', 'v', 1, '16:58:59.132', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (9, 'vv', 'vv', 'v', 1, '16:59:59.917', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (10, 'vv', 'vv', 'v', 1, '17:01:16.353', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (11, 'vv', 'vv', 'v', 1, '17:01:37.466', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (12, 'vv', 'vv', 'v', 1, '17:02:22.744', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (13, 'cc', 'ccc', 'ccc', 1, '17:03:19.859', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (14, 'www', 'www', 'www', 1, '17:05:20.003', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (15, 'qqq', 'qqq', 'qqq', 1, '17:07:29.886', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (16, 'qqq', 'qqq', 'qqq', 1, '17:07:33.825', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (17, 'qqq', 'qqq', 'qqq', 1, '17:08:16.072', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (18, 'qqq', 'qqq', 'qqq', 1, '17:09:01.266', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (19, 'ggg', 'ggg', 'ggg', 1, '17:12:32.22', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (20, 'eee', 'eee', 'eee', 1, '17:13:38.508', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (21, 'eee', 'eee', 'eee', 1, '17:13:41.735', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (22, 'www', 'www', 'www', 1, '17:15:01.992', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (23, 'www', 'www', 'www', 1, '17:15:31.533', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (24, 'fff', 'ffff', 'fff', 1, '17:18:14.503', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (25, 'fff', 'ffff', 'fff', 1, '17:18:56.756', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (26, 'eee', 'eee', 'eee', 1, '17:19:15.526', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (27, 'zzz', 'zzzz', 'zzz', 1, '17:19:33.916', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (28, 'ooooo', 'oooo', 'oooo', 1, '17:20:37.024', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (29, 'yyyy', 'yyyy', 'yyyy', 1, '17:24:34.324', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (5, 'aaa', 'aaa', 'aaa', 1, '16:52:10.492', '127.0.0.1', false);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (3, 'aaa', 'aaa', 'aaa', 1, '16:48:24.557', '127.0.0.1', false);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (1, 'software1', 'software1', 'software1', 1, '16:42:50.876', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (2, 'eee', 'eee', 'eee', 1, '16:45:45.709', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (4, 'aaa', 'aaa', 'aaa', 1, '16:51:56.176', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (6, 'ggg', 'ggg', 'ggg', 1, '16:55:04.118', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (7, 'vv', 'vv', 'v', 1, '16:55:23.441', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (8, 'vv', 'vv', 'v', 1, '16:58:59.132', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (9, 'vv', 'vv', 'v', 1, '16:59:59.917', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (10, 'vv', 'vv', 'v', 1, '17:01:16.353', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (11, 'vv', 'vv', 'v', 1, '17:01:37.466', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (12, 'vv', 'vv', 'v', 1, '17:02:22.744', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (13, 'cc', 'ccc', 'ccc', 1, '17:03:19.859', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (14, 'www', 'www', 'www', 1, '17:05:20.003', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (15, 'qqq', 'qqq', 'qqq', 1, '17:07:29.886', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (16, 'qqq', 'qqq', 'qqq', 1, '17:07:33.825', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (17, 'qqq', 'qqq', 'qqq', 1, '17:08:16.072', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (18, 'qqq', 'qqq', 'qqq', 1, '17:09:01.266', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (19, 'ggg', 'ggg', 'ggg', 1, '17:12:32.22', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (20, 'eee', 'eee', 'eee', 1, '17:13:38.508', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (21, 'eee', 'eee', 'eee', 1, '17:13:41.735', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (22, 'www', 'www', 'www', 1, '17:15:01.992', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (23, 'www', 'www', 'www', 1, '17:15:31.533', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (24, 'fff', 'ffff', 'fff', 1, '17:18:14.503', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (25, 'fff', 'ffff', 'fff', 1, '17:18:56.756', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (26, 'eee', 'eee', 'eee', 1, '17:19:15.526', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (27, 'zzz', 'zzzz', 'zzz', 1, '17:19:33.916', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (28, 'ooooo', 'oooo', 'oooo', 1, '17:20:37.024', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (29, 'yyyy', 'yyyy', 'yyyy', 1, '17:24:34.324', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (5, 'aaa', 'aaa', 'aaa', 1, '16:52:10.492', '127.0.0.1', false);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (3, 'aaa', 'aaa', 'aaa', 1, '16:48:24.557', '127.0.0.1', false);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (1, 'software1', 'software1', 'software1', 1, '16:42:50.876', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (2, 'eee', 'eee', 'eee', 1, '16:45:45.709', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (4, 'aaa', 'aaa', 'aaa', 1, '16:51:56.176', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (6, 'ggg', 'ggg', 'ggg', 1, '16:55:04.118', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (7, 'vv', 'vv', 'v', 1, '16:55:23.441', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (8, 'vv', 'vv', 'v', 1, '16:58:59.132', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (9, 'vv', 'vv', 'v', 1, '16:59:59.917', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (10, 'vv', 'vv', 'v', 1, '17:01:16.353', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (11, 'vv', 'vv', 'v', 1, '17:01:37.466', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (12, 'vv', 'vv', 'v', 1, '17:02:22.744', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (13, 'cc', 'ccc', 'ccc', 1, '17:03:19.859', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (14, 'www', 'www', 'www', 1, '17:05:20.003', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (15, 'qqq', 'qqq', 'qqq', 1, '17:07:29.886', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (16, 'qqq', 'qqq', 'qqq', 1, '17:07:33.825', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (17, 'qqq', 'qqq', 'qqq', 1, '17:08:16.072', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (18, 'qqq', 'qqq', 'qqq', 1, '17:09:01.266', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (19, 'ggg', 'ggg', 'ggg', 1, '17:12:32.22', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (20, 'eee', 'eee', 'eee', 1, '17:13:38.508', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (21, 'eee', 'eee', 'eee', 1, '17:13:41.735', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (22, 'www', 'www', 'www', 1, '17:15:01.992', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (23, 'www', 'www', 'www', 1, '17:15:31.533', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (24, 'fff', 'ffff', 'fff', 1, '17:18:14.503', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (25, 'fff', 'ffff', 'fff', 1, '17:18:56.756', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (26, 'eee', 'eee', 'eee', 1, '17:19:15.526', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (27, 'zzz', 'zzzz', 'zzz', 1, '17:19:33.916', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (28, 'ooooo', 'oooo', 'oooo', 1, '17:20:37.024', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (29, 'yyyy', 'yyyy', 'yyyy', 1, '17:24:34.324', '127.0.0.1', true);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (5, 'aaa', 'aaa', 'aaa', 1, '16:52:10.492', '127.0.0.1', false);
+INSERT INTO biblioteca_software (id, nombre, descripcion, link_externo, idu, fechat, ip, estado) VALUES (3, 'aaa', 'aaa', 'aaa', 1, '16:48:24.557', '127.0.0.1', false);
+
+
+SET search_path = proyectos, pg_catalog;
+
+--
+-- TOC entry 1953 (class 0 OID 19623)
+-- Dependencies: 176 1957
+-- Data for Name: actividades; Type: TABLE DATA; Schema: proyectos; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 1954 (class 0 OID 19633)
+-- Dependencies: 178 1957
+-- Data for Name: proyectos; Type: TABLE DATA; Schema: proyectos; Owner: postgres
+--
+
+INSERT INTO proyectos (id, nombre, descripcion, fecha_creacion, ip, idu, estado, fechat) VALUES (2, 'test2', 'test2', '2012-11-12', '127.0.0.1', 1, true, '22:07:08.232');
+INSERT INTO proyectos (id, nombre, descripcion, fecha_creacion, ip, idu, estado, fechat) VALUES (3, 'test4', 'test2', '2012-11-12', '127.0.0.1', 1, true, '22:18:21.212');
+INSERT INTO proyectos (id, nombre, descripcion, fecha_creacion, ip, idu, estado, fechat) VALUES (1, 'test8', 'descripcion', '2012-11-12', '127.0.0.1', 1, true, '22:03:53.347');
+
+
+--
+-- TOC entry 1955 (class 0 OID 19643)
+-- Dependencies: 180 1957
+-- Data for Name: proyectos_usuario; Type: TABLE DATA; Schema: proyectos; Owner: postgres
+--
+
+
+
+SET search_path = vulnerabilidades, pg_catalog;
+
+--
+-- TOC entry 1956 (class 0 OID 19650)
+-- Dependencies: 182 1957
+-- Data for Name: vulnerabilidad; Type: TABLE DATA; Schema: vulnerabilidades; Owner: postgres
+--
+
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (41, 'test2.1', 'descripcion 2.1', '456', '2012-09-12', '2012-09-12', 'test2.1', NULL, 2, 1, true, '11:26:51.267-04:30', '127.0.0.1', 40, '4109122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (42, 'test2.2', 'descripcion 2.2', '789', '2012-03-12', '2012-10-12', 'test2.2', NULL, 2, 1, true, '11:27:39.285-04:30', '127.0.0.1', 40, '4209122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (37, 'test1', 'descriptiotest1', '1234', '2006-10-02', '2006-10-02', 'test1', NULL, 1, 1, true, '01:06:47.712-04', '127.0.0.1', NULL, '3710022006');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (38, 'test1.1', 'description1.1', '456', '2006-10-02', '2006-10-02', 'test1.1', NULL, 2, 1, true, '01:07:21.396-04', '127.0.0.1', 37, '3810022006');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (39, 'test1.2', 'description 1.2', '789', '2006-10-02', '2006-10-02', 'test1.2', NULL, 2, 1, true, '01:08:46.503-04', '127.0.0.1', 37, '3910022006');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (40, 'test2', 'descripcion 2', '123', '2012-09-12', '2012-09-12', 'test2', NULL, 1, 1, true, '11:20:50.827-04:30', '127.0.0.1', NULL, '4009122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (43, 'POLSEGUINT', 'Usuario local que debe tener todos los equipos corporativo. Antiguamente llamado DeskAdmin. Se requiere controlar el uso del mismo', '327026', '2012-07-12', '2012-10-12', 'kery', NULL, 1, 1, true, '11:48:08.718-04:30', '127.0.0.1', NULL, NULL);
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (44, 'dddd', 'dddd', '123', '2012-10-12', '2012-10-12', 'ddddd', NULL, 1, 1, true, '13:33:19.66-04:30', '127.0.0.1', NULL, '4410122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (45, 'dddd', 'dddd', '123', '2012-10-12', '2012-10-12', 'ddddd', NULL, 1, 1, true, '13:33:24.299-04:30', '127.0.0.1', NULL, '4510122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (46, 'caso', 'desc', '123', '2012-10-12', '2012-10-12', 'juan', NULL, 1, 1, true, '13:34:39.491-04:30', '127.0.0.1', NULL, '4610122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (47, 'caso', 'desc', '123', '2012-10-12', '2012-10-12', 'juan', NULL, 1, 1, true, '13:35:16.994-04:30', '127.0.0.1', NULL, '4710122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (48, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:37:19.464-04:30', '127.0.0.1', NULL, '4810122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (49, 'qqq', 'qqqq', '1223', '2012-10-12', '2012-10-12', 'juan', NULL, 1, 1, true, '13:38:38.228-04:30', '127.0.0.1', NULL, '4910122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (50, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:39:20.134-04:30', '127.0.0.1', NULL, '5010122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (51, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:40:04.696-04:30', '127.0.0.1', NULL, '5110122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (52, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:40:33.249-04:30', '127.0.0.1', NULL, '5210122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (53, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:41:06.006-04:30', '127.0.0.1', NULL, '5310122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (54, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:42:41.297-04:30', '127.0.0.1', NULL, '5410122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (55, 'qqqqq', 'qqqq', 'qqq', '2012-10-12', '2012-10-12', 'ssss', NULL, 1, 1, true, '13:43:38.72-04:30', '127.0.0.1', NULL, '5510122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (56, 'eeee', 'eeee', '123', '2012-10-12', '2012-10-12', 'desde', NULL, 1, 1, true, '13:46:07.855-04:30', '127.0.0.1', NULL, '5610122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (57, 'xx', 'xx', 'xx', '2012-10-12', '2012-10-12', 'aaaaa', NULL, 1, 1, true, '13:46:49.348-04:30', '127.0.0.1', NULL, '5710122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (58, 'xx', 'xx', 'xx', '2012-10-12', '2012-10-12', 'aaaaa', NULL, 1, 1, true, '13:48:36.286-04:30', '127.0.0.1', NULL, '5810122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (59, 'xx', 'xx', 'xx', '2012-10-12', '2012-10-12', 'aaaaa', NULL, 1, 1, true, '13:48:37.9-04:30', '127.0.0.1', NULL, '5910122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (60, 'xx', 'xx', 'xx', '2012-10-12', '2012-10-12', 'aaaaa', NULL, 1, 1, true, '13:50:04.53-04:30', '127.0.0.1', NULL, '6010122012');
+INSERT INTO vulnerabilidad (id, nombre, descripcion, rt, fechadetectada, fechareportada, responsable, fechacierre, tipocaso, idu, estado, fechat, ip, idcaso, identificador) VALUES (61, 'xx', 'xx', 'xx', '2012-10-12', '2012-10-12', 'aaaaa', NULL, 1, 1, true, '13:51:37.482-04:30', '127.0.0.1', NULL, '6110122012');
+
+
+SET search_path = autenticacion, pg_catalog;
+
+--
+-- TOC entry 1937 (class 2606 OID 19679)
+-- Dependencies: 170 170 170 170 170 170 1958
+-- Name: key_apli_usu_tipo; Type: CONSTRAINT; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usu_apli_tipo
+    ADD CONSTRAINT key_apli_usu_tipo PRIMARY KEY (id, id_usuarios, id_aplicaciones, id_tipo_usuarios, estado);
+
+
+--
+-- TOC entry 1933 (class 2606 OID 19681)
+-- Dependencies: 166 166 1958
+-- Name: key_aplicaciones; Type: CONSTRAINT; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY aplicaciones
+    ADD CONSTRAINT key_aplicaciones PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1935 (class 2606 OID 19683)
+-- Dependencies: 168 168 1958
+-- Name: key_tipo_usuarios; Type: CONSTRAINT; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY tipo_usuarios
+    ADD CONSTRAINT key_tipo_usuarios PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1939 (class 2606 OID 19685)
+-- Dependencies: 172 172 1958
+-- Name: usuarios_pkey; Type: CONSTRAINT; Schema: autenticacion; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuarios
+    ADD CONSTRAINT usuarios_pkey PRIMARY KEY (id);
+
+
+SET search_path = proyectos, pg_catalog;
+
+--
+-- TOC entry 1941 (class 2606 OID 19687)
+-- Dependencies: 176 176 176 1958
+-- Name: pk_actividades; Type: CONSTRAINT; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY actividades
+    ADD CONSTRAINT pk_actividades PRIMARY KEY (id, id_proyecto);
+
+
+--
+-- TOC entry 1943 (class 2606 OID 19689)
+-- Dependencies: 178 178 1958
+-- Name: pk_proyecto; Type: CONSTRAINT; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY proyectos
+    ADD CONSTRAINT pk_proyecto PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1945 (class 2606 OID 19691)
+-- Dependencies: 180 180 180 180 1958
+-- Name: pk_proyecto_usuario; Type: CONSTRAINT; Schema: proyectos; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY proyectos_usuario
+    ADD CONSTRAINT pk_proyecto_usuario PRIMARY KEY (id, id_proyecto, id_usuario);
+
+
+SET search_path = vulnerabilidades, pg_catalog;
+
+--
+-- TOC entry 1947 (class 2606 OID 19693)
+-- Dependencies: 182 182 182 1958
+-- Name: pkvulnerabilidad; Type: CONSTRAINT; Schema: vulnerabilidades; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY vulnerabilidad
+    ADD CONSTRAINT pkvulnerabilidad PRIMARY KEY (id, estado);
+
+
+--
+-- TOC entry 1966 (class 0 OID 0)
+-- Dependencies: 11
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2012-12-12 06:57:38
+
+--
+-- PostgreSQL database dump complete
+--
+

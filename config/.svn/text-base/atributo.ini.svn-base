@@ -1,0 +1,32 @@
+;Es un array que contiene todos los atributos posibles de cada una de las pagina de la aplicación
+;El index de este  el nombre de la pagina el cual contiene un  con los siguienets elementos
+;[nombrePagina]
+;titulo='' Es el titulo de la pagina
+;nombre='' Es el nombre del fichero
+;charset=''
+;idioma=''
+;httpequiv=''
+;content=''
+;ficEstilos='' Es el conjunto de archivos.css (estilos) que van ha ser aplicados a la página. Deben estar separados por ;
+;ficJavaScript='' Es el conjunto de archivos.js (javascript) que van ha ser aplicados en la página. Deben estar separados por ;
+;javaScriptGeneral='' Es un campo que puede ser modificado en la vista o el controlador para aqurega codigo javascript al momento de ejecutar la pagina.
+;javaScriptBody='' Se coloca los llamados a funciones javascript junto con el evento que se ejecutaran en el body.
+;idbody='' Es el id del body
+;Todos estos campos pueden ser alterados y modificados en el controlador.
+
+
+
+
+[index]
+titulo="Portal Registro de Avances Fomento- Bienvenidos"
+nombre="index.php"
+charset="charset=ISO-8859-1"
+idioma="Es"
+httpequiv="Content-Type"
+content="text/html"
+ficEstilos="estilo.css;contenidos.css;"
+ficJavaScript="redirecciona.js;fecha.js;validaciones2.js;ajaxfunc.js;imprimir.js;"
+javaScriptGeneral=""
+javaScriptBody="onload=redirecciona('index');"
+idbody="index"
+divContenido="cont_index"

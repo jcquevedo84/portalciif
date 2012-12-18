@@ -1,0 +1,227 @@
+<?php
+/**
+	*error
+	*
+	*Clase error.php
+	*En esta clase se gestionara el registo de los errores que ocurran dentro de la aplicación
+	*@copyright Personal
+	*@author Juan Carlos Rodriguez
+	*@version 1.0
+	*@package error
+	*
+	*/
+	class error
+	{
+		/** 
+		* string que guarda el nombre del archivo del log de errores
+		* @var string $nombre
+		* @access private
+		*/
+		static private $nombreE="";
+		/**
+		* string que guarda la ubicación logica donde se encuentra el archivo
+		* @var string $direccion
+		* @access private
+		*/
+		static private $direccion="";
+		/**
+		* booleana que indica si se registrara los errores en un archivo
+		* @var string $printFile
+		* @access private
+		*/
+		static private $printFile="";
+		/** 
+		* booleana que indica si se visualizara los errores por HTML
+		* @var string $printHtml
+		* @access private
+		*/
+		static private $printHtml="";
+		/** 
+		* string que guarda el nombre de la clase.
+		* @var string $nombreClase
+		* @access private
+		*/
+		static private $nombreClase=__CLASS__;
+		/**
+		*
+		*error
+		*
+		*Es el constructor de la clase.
+		*
+		*@param array $nombre es el nombre del archivo donde se guardaran los mensajes de errores
+		*@param string $direccion es la ubicación logica donde se encuentra el archivo
+		*@access public
+		*@return void
+		*/	
+		public function error ($nombre="",$direccion="",$printFile=true,$printHtml=false) 
+		{
+			self::$nombreE=$nombre;
+			self::$direccion=$direccion;
+			self::$printFile=$printFile;
+			self::$printHtml=$printHtml;
+			if(!file_exists(self::$direccion.self::$nombreE))
+			{
+				$msm="Se ha creado el objeto error";
+				$msm="\n[" . date("d-M-Y H:i:s") ."]".$msm;
+				if (!$gestor = fopen(self::$direccion.self::$nombreE, 'w')) 
+				{
+					echo "No se puede abrir el archivo (self::$direccion.self::$nombreE)";
+					return false;
+				}
+				if (fwrite($gestor, $msm."\n") === FALSE) 
+				{
+					echo "No se puede escribir al archivo (self::$direccion.self::$nombreE)";
+					return false;
+				}
+				fclose($gestor);
+			}
+		}
+		/**
+		*
+		*printError
+		*
+		*En esta función se registrara un mensaje de error en un archivo y/o se visualizara por el brower, de acuerdo a un tipo de error.
+		*
+		*@param string $nombreC es el nombre de la clase desde donde es generado el error
+		*@param string $numLine es el numero de linea desde donde es generado el error
+		*@param integer $tipoError es el tipo de error 
+		*@param string $nombreF es el nombre de la función desde donde es generado el error 
+		*@param string $nomVar es el nombre de la variable que genero el error
+		*@param string $anexo es un string utilizado para enviar cualquier tip de mensaje
+		*@access public
+		*@return void
+		*/		
+		public static function printError($msm="",$nombreC="",$numLine="",$nombreF="")
+		{
+	 		$msm="El Error ".$msm." se Genero desde $nombreC -> $nombreF en la Linea $numLine";
+	 		echo $msm;
+	 		if(self::$printFile)
+	 		{
+	 			self::$printLogError($msm);
+	 		}
+	 		if(self::$printHtml)
+	 		{
+	 			echo "<br>".$msm."<br>";
+	 		}
+		}
+		/**
+		*
+		*printLogError
+		*
+		*Escribe en un archivo lops errores ocurridos durante la ejecución de la aplicación.
+		*
+		*@param string $msm es la linea que se va a registrar en el archivo
+		*@access public
+		*@return bool
+		*/
+		public static function printLogError($msm="")
+		{
+			$nombre_archivo =self::$direccion.self::$nombreE;
+			if(($msm!="")and(file_exists($nombre_archivo)))
+			{
+				$msm="\n[" . date("d-M-Y H:i:s") ."]".$msm;
+				if (!$gestor = fopen($nombre_archivo, 'a+')) 
+				{
+					die ("No se puede abrir el archivo ($nombre_archivo)");
+					return false;
+				}
+				if (fwrite($gestor, $msm."\n") === FALSE) 
+				{
+					die ("No se puede escribir al archivo ($nombre_archivo)");
+					return false;
+				}
+				fclose($gestor);
+				return true;
+			}
+		}
+		/**
+		*
+		*printLogTraza
+		*
+		*Escribe en un archivo los valores de una varieble en especifico.
+		*
+		**@param string $nombreF es el nombre de la función desde donde es generado el error  
+		*@param string $nombreC es el nombre de la clase desde donde es generado el error
+		*@param string $nombre es el nombre del archivo del log de errores
+		*@param string $direccion es la ubicación logica donde se encuentra el archivo
+		*@param integer $msm es la linea que se va a registrar en el archivo
+		*@access public
+		*@return bool
+		*/
+		public static function printLogTraza($nomVar="",$valor="",$nombreC="",$nombreF="")
+		{
+			$nombre_archivo =self::$direccion.self::$nombreE;
+			if(!is_array($valor))
+			{
+				$msm="El valor de $nomVar es $valor que se encuentra en $nombreC y en la función $nombreF";	
+			}
+			if(is_array($valor))
+			{
+				foreach($valor as $v1 => $vv) 
+				{
+		    		if(is_array($vv))
+		    		{
+			    		foreach ($vv as $v2 => $value) 
+			    		{
+			        		$st.="[".$v2."]=".$value."\n";
+			    		}
+		    		}
+		    		else
+		    		{
+		    			$st.="[".$v1."]=".$vv."\n";
+		    		}
+				}
+				$msm="El valor de $nomVar es $st que se encuentra en $nombreC y en la función $nombreF";
+			}
+			if(($msm!="")and(file_exists($nombre_archivo)))
+			{
+				$msm="\n[" . date("d-M-Y H:i:s") ."]".$msm;
+				if (!$gestor = fopen($nombre_archivo, 'a+')) 
+				{
+					die("No se puede abrir el archivo ($nombre_archivo)");
+					return false;
+				}
+				if (fwrite($gestor, $msm."\n") === FALSE) 
+				{
+					die("No se puede escribir al archivo ($nombre_archivo)");
+					return false;
+				}
+				fclose($gestor);
+				return true;
+			}
+			else
+			{
+				self::$printError(self::$nombreClase,385,2,"printLogTraza",$nombre_archivo);
+				return false;
+			}
+		}
+		
+		/**
+		*
+		*setPrintFile
+		*
+		*Actualizar el valor de la variable printFile para visualizar los errores por el archivo de log.
+		*
+		*@param string $var es el valor que de actualización este debe de ser true o false.  
+		*@return void
+		*/
+		public function setPrintFile($var="")
+		{
+				self::$printHtml=$var;
+		}
+		/**
+		*
+		*setPrintHtml
+		*
+		*Actualizar el valor de la variable printHtml para visualizar los errores por el brower.
+		*
+		*@param string $var Es el valor que se va a insertar este debe de ser true o false.
+		*@access public
+		*@return void
+		*/
+		public function setPrintHtml($var="")
+		{
+				self::$printHtml=$var;
+		}
+	}
+?>

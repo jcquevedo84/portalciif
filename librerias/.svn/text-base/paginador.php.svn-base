@@ -1,0 +1,212 @@
+<?php
+	//LAS FUNCIONES DE LA CLASE PAGINADOR NO PUEDEN IR EN LAS CLASE catalogoC y catalogoM 
+	//RESPECTIVAMENTE POR QUE ES INDEPENDIENTE DEL CATALOGO, Y  SE UTILIZARÁ COMO PAGINADOR 
+	//EN LOS REGISTROS DE CONSULTAS INDIVIDUALES UBICADOR EN LA CLASE principal
+	class paginador
+	{
+		public $numRegistros;
+		public $numpaginas;
+		public $query;
+		public $obView;
+		public $objSession;
+		public $objmodel;
+		public $pagAct="";
+		public $counIma;
+		public $numMaxPag;
+		public function paginador($sql="",$numRegistros="",$numpaginas="",$obView="",$objSession="",$objmodel="")
+		{
+			$this->objSession=$objSession;
+			$this->objmodel=$objmodel;
+			$this->obView=$obView;
+			$this->numRegistros=$numRegistros;
+			$this->numpaginas=$numpaginas;
+			if(!empty($sql))
+				$this->setQuery($sql);
+			else 
+				$this->setQuery($_SESSION["QUERY"]);
+			if(!empty($_SESSION["pagAct"]))
+				$this->pagAct=$_SESSION["pagAct"];
+			else
+			{ 
+				$this->pagAct=1;
+				$_SESSION["pagAct"]=$this->pagAct;
+			}
+			if((empty($_SESSION["counIma"])) and (!empty($this->query)))
+			{
+				$this->counIma=$this->consultaCountOracle();
+				$_SESSION["counIma"]=$this->counIma;
+			}
+			else
+				$this->counIma=$_SESSION["counIma"];
+			$this->numMaxPag=ceil($this->counIma/$this->numRegistros);
+		}
+		public function next($ini="")
+		{
+			$respuesta = new xajaxResponse();
+			$respuesta->addAssign("paginador","innerHTML",$this->viewPaginador($ini));
+			return $respuesta;
+		}
+		public function viewPaginador($ini="")
+		{
+			$html="<div name=\"paginador\" id=\"paginador\" align=\"center\">";
+			$html.="<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"100%\"><tr><td align=\"center\">";
+			$a=$ini;
+			$htmSpecialFin="";
+			if($this->numpaginas>$ini)
+			{
+				$fin=$this->numpaginas;
+				$res=$this->numpaginas+$ini;
+				if($res<$this->numMaxPag)
+				{
+					$s=$fin+1;
+					$htmSpecialFin="<a style=\"color:blue\" id=\"nexts\" name=\"nexts\" onclick=\"javascript:xajax_next($s)\">&nbsp;></a>";
+				}
+			}
+			else
+			{ 
+				$res=$this->numpaginas+$ini;
+				if($res<$this->numMaxPag)
+				{
+					$fin=$this->numpaginas+$ini-1;
+					$s=$fin+1;
+					$htmSpecialFin="<a style=\"color:blue\" id=\"nexts\" name=\"nexts\" onclick=\"javascript:xajax_next($s)\">&nbsp;></a>";
+				}
+				else
+				{
+					$fin=$this->numMaxPag;
+				}
+			}
+			$htmSpecialIni="";
+			if($ini>=$this->numpaginas)
+			{
+				$s=$ini-$this->numpaginas;
+				$htmSpecialIni="<a style=\"color:blue\" id=\"nexts\" name=\"nexts\" onclick=\"javascript:xajax_next($s)\"><&nbsp;</a>";
+			}
+			$html.=$htmSpecialIni;
+			for($i=$ini;$i<=$fin;$i++)
+			{
+				if($i==$this->pagAct)
+					$html.="<a style=\"color:red\" id=\"".$i."\" name=\"".$i."\">".$i."</a>&nbsp;";
+				else 
+					$html.="<a style=\"color:blue\" id=\"".$i."\" name=\"".$i."\" onclick=\"javascript:xajax_cambioItem($a)\">".$i."</a>&nbsp;";
+				$a++;
+			}
+			$html.=$htmSpecialFin;			
+			$html.="</td></tr></table></div>";
+			return $html;	
+		}
+		public function cambioItem($inic="")
+		{
+			$ini=$inic*$this->numRegistros-$this->numRegistros;
+			$fin=$inic*$this->numRegistros-1;
+			$inx=floor($inic/10)*10;
+			if($inx==0)
+	        		$inx=1;
+			$_SESSION["pagAct"]=$inic;
+			$this->pagAct=$_SESSION["pagAct"];
+			$respuesta = new xajaxResponse();
+			$rowset1=$this->consulta($this->consultaOracle($ini,$fin));
+			$this->objSession->setVarSession("[cesta][busqueda]",$rowset1);
+			$this->objmodel->tipo_de_resolucion('busqueda');
+			$salida=$this->obView->ajaxPostView($this->objSession->getVarSession("[cesta][busqueda]"),2,$this->viewPaginador($inx),$this->pagAct);	
+			$respuesta->assign('ContTabul',"innerHTML",$salida);
+			//se crea el mapa
+			header("Cache-Control: no-cache, must-revalidate, private, pre-check=0, post-check=0, max-age=0");
+			header("Expires: " . gmdate('D, d M Y H:i:s', time()) . " GMT");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");      
+			header("Pragma: no-cache"); 
+			header('Content-Type: text/plain');
+			$map = ms_newMapObj($this->objmodel->PM_MAP_FILE);
+			$old_geo_scale = $this->objSession->gCM("geo_scale");
+		    $scaleLayers   = $this->objSession->gCM("scaleLayers");
+		    $grouplist     = $this->objSession->gCM("grouplist");
+		    $url_points    = ($this->objSession->checkCM("url_points")) ? $this->objSession->gCM("url_points") : false;
+		    $pmap=new mapa($this->objError,$this->objSession,$this->objmodel->PM_MAP_FILE,$map);
+		    $latmax=$_SESSION["maxy_geo"];
+			$lonmin=$_SESSION["minx_geo"];
+			$latmin=$_SESSION["miny_geo"];
+			$lonmax=$_SESSION["maxx_geo"];
+			$geoext["minx"]=$lonmin;
+		    $geoext["miny"]=$latmin;//
+		    $geoext["maxx"]=$lonmax;
+		    $geoext["maxy"]=$latmax;
+			$this->objSession->sCM("GEOEXT",$geoext);
+			$color=array(101,231,211);
+			$this->objSession->sCM("url_points","");//verificar si se coloca en blanco o se elimina la variable
+			$point2= $this->objmodel->crearPunto($rowset1,$color); 
+			$this->objSession->sCM("url_points",$point2);
+			$pmap->PMap("zoompoint");
+			$mapURL = $this->objmodel->direccionImagen.basename($pmap->pmap_returnMapImgURL());
+		    $respuesta->addScript("procesarpunto('$mapURL');");
+			return $respuesta;
+		}
+		public function setQuery($sql)
+		{
+			$this->query=$sql;
+			$_SESSION["QUERY"]=$sql;
+		}
+		public function consultaOracle($ini="",$max="")
+		//solo coloca los limites de la consulta
+		{
+			if(!empty($this->query))
+			{
+				$this->query=$_SESSION["QUERY"];
+			}
+			
+			$q="SELECT *
+			FROM
+			  (SELECT d.*, ROWNUM rnum
+			     
+			   FROM (".$this->query.") d
+			   WHERE ROWNUM <= $max)
+			WHERE rnum >= $ini";	
+			//echo "f".$q;
+			return $q;
+		}
+		public function consultaCountOracle()
+		{
+			$db = '(DESCRIPTION =
+				(ADDRESS = (PROTOCOL = TCP)
+				(HOST = 130.16.1.3)(PORT = 1521))
+				(CONNECT_DATA =
+				(SERVER = DEDICATED)
+				(SERVICE_NAME = SDCAT)))';
+			   	$conne=oci_connect('catalog','catalog',$db);
+				if (!$conne)
+	    		{
+	    		echo "No se pudo conectar a la Base de Datos ".$this->pagina." invocada desde ".$this->clase." y la función ".$nombreFuncion.",<br>No se logro la conexion";
+	    		die;
+		    	}
+		    $q="SELECT count(*)
+			FROM
+			  (".$this->query .") ";
+			$Q = oci_parse($conne, $q);
+	   		oci_execute($Q, OCI_DEFAULT);	
+			ocifetchstatement($Q, &$rowset1, 0, 100, OCI_ASSOC |
+			OCI_FETCHSTATEMENT_BY_ROW);	
+			oci_close($conne);
+			return $rowset1[0]["COUNT(*)"];
+		}
+		public function consulta($query)
+		{
+			$db = '(DESCRIPTION =
+				(ADDRESS = (PROTOCOL = TCP)
+				(HOST = 130.16.1.3)(PORT = 1521))
+				(CONNECT_DATA =
+				(SERVER = DEDICATED)
+				(SERVICE_NAME = SDCAT)))';
+			   	$conne=oci_connect('catalog','catalog',$db);
+				if (!$conne)
+	    		{
+	    		echo "No se pudo conectar a la Base de Datos ".$this->pagina." invocada desde ".$this->clase." y la función ".$nombreFuncion.",<br>No se logro la conexion";
+	    		die;
+		    	}
+			$Q = oci_parse($conne, $query);
+	   		oci_execute($Q, OCI_DEFAULT);	
+			ocifetchstatement($Q, &$rowset1, 0, 100, OCI_ASSOC |
+			OCI_FETCHSTATEMENT_BY_ROW);	
+			oci_close($conne);
+			return $rowset1;
+		}
+	}
+?>

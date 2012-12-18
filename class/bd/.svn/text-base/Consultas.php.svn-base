@@ -1,0 +1,614 @@
+<?php
+/**
+*LPAIS Consultas
+*
+*Archivo donde se configuran todas las consultas a la base de datos
+*En este archivo estan contenidas todas aquellas variables gloabales al sistema Web
+*@copyright Instituto de Ingenieria CPDI
+*@author Juan Carlos Rodriguez - Jesus Rodriguez - Rosa Aguilar
+*@version 1.0
+*@package Consultas
+*/
+
+/**
+*
+*Contiene todas las consultas que se realizaran en la aplicación.
+*En caso de que la consulta fuera de insercion o actualizaciónen el index campos 0=>array( 'CAMPO'=>'a.fechaexp','VALOR'=>'')
+*array[]=array[nombrePagina]=array[campos] es un array que contiene todos los campos a seleccionar, eliminar o modificar en la consulta
+*		 					 array[tablas] son las tablas a las cuales se le aplicara la consulta
+							 array[condicion]= es un array que contiene los valores que se tomara en las condicion de la consulta, pueden ser varias condiciones
+							 				   array[CAMPO] es el campos a la cual se aplicar ala condición.
+							 				   array[OPERADORR] es el operador de relacion =,<,>,<=,>=,!=
+							 				   array[OPERADORL] en el operador logico and, or, not
+							 				   array[VALOR] Es el valor que tomara la condición.
+							 array[orden]=	 Es un array que contien el orden en que se presentara la consulta  
+							 				   array[CAMPO] es el nombre del campo
+							 				   array[ORD] es el orden en que aparecera desc, asc.
+*@global array $Consulta registroSolicitanteM
+*@name $Consulta
+*/
+$Consulta=array('indexM'=>array(
+										'estado'=>array(
+															'campos'=>array('idestado','nombre'),
+															'tablas'=>array('estados'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'1')
+												      						  ),
+															'orden'=>''
+										),
+										'municipioD'=>array(
+															'campos'=>array('idmunicipio','nombre'),
+															'tablas'=>array('municipios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idestado','OPERADORR'=>'=','OPERADORL'=>'and','VALOR'=>''),
+																				1=>array( 'CAMPO'=>'estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'1')
+												      						  ),
+															'orden'=>''
+										),
+										'parroquiaD'=>array(
+															'campos'=>array('idparroquia','nombre'),
+															'tablas'=>array('parroquia'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idestado','OPERADORR'=>'=','OPERADORL'=>'and','VALOR'=>''),
+																				1=>array( 'CAMPO'=>'idmunicipio','OPERADORR'=>'=','OPERADORL'=>'and','VALOR'=>''),
+																				2=>array( 'CAMPO'=>'estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'1')
+												      						  ),
+															'orden'=>''
+										),
+										'empresa'=>array(
+															'campos'=>array('idempresa','nombre'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'1')
+												      						  ),
+															'orden'=>''
+										),
+										'tipousuario'=>array(
+															'campos'=>array('codtipousuario','tipousuario'),
+															'tablas'=>array('tiposusuario'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'estado','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'1')
+												      						  ),
+															'orden'=>''
+										),
+										'consultarLogin'=>array(
+															'campos'=>array('id','login','password','nombre','codtipousuario','codempresa','email'),
+															'tablas'=>array('usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>' and ','VALOR'=>''),
+																				1=>array( 'CAMPO'=>'password','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''
+										),
+										'recordarPass'=>array(
+															'campos'=>array('id','login','password','nombre','codtipousuario','codempresa'),
+															'tablas'=>array('usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'login','OPERADORR'=>'=','OPERADORL'=>' and ','VALOR'=>''),
+																				1=>array( 'CAMPO'=>'docidentidad','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+												      						  ),
+															'orden'=>''
+										)
+									),
+					'empresaM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'upsM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'comercioM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'conceptoM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'presentacionM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'productoresM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'productoM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'operacionM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'juntadirM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'enlacesestatM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+															'tablas'=>array('empresa')
+										),
+										'listar'=>array(
+															'campos'=>array('idempresa','nombre','direccion','estado'),
+															'tablas'=>array('empresa'),
+															'condicion'=>'',
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('nombre','direccion','idestado','idmunicipio','idparroquia'),
+															'tablas'=>array('empresa'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'idestado','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'idmunicipio','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'idparroquia','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'direccion','VALOR'=>'')
+																			),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('empresa'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'idempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					),
+					'registrouserM'=>array(
+										'guardar'=>array(
+															'campos'=>array(
+																			0=>array( 'CAMPO'=>'login','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'password','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'docidentidad','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'cargo','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'telefono1','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'telefono2','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'email','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'emailalt','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'codtipousuario','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'codempresa','VALOR'=>'')
+																			),
+															'tablas'=>array('usuarios')
+										),
+										'listar'=>array(
+															'campos'=>array('a.id','a.nombre','a.docidentidad','a.codtipousuario','b.nombre','a.estado'),
+															'tablas'=>array('usuarios as a','empresa as b'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'a.codempresa','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'b.idempresa'),
+												      						  ),
+															'orden'=>''
+										),
+										'seleccionar'=>array(
+															'campos'=>array('id','login','password','nombre','docidentidad','cargo','telefono1','telefono2','email','emailalt','codtipousuario','codempresa'),
+															'tablas'=>array('usuarios'),
+															'condicion'=>array(
+																				0=>array( 'CAMPO'=>'id','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>''),
+												      						  ),
+															'orden'=>''
+										),
+										'modificar'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'login','VALOR'=>''),
+																			1=>array( 'CAMPO'=>'password','VALOR'=>''),
+																			2=>array( 'CAMPO'=>'nombre','VALOR'=>''),
+																			3=>array( 'CAMPO'=>'docidentidad','VALOR'=>''),
+																			4=>array( 'CAMPO'=>'cargo','VALOR'=>''),
+																			5=>array( 'CAMPO'=>'telefono1','VALOR'=>''),
+																			6=>array( 'CAMPO'=>'telefono2','VALOR'=>''),
+																			7=>array( 'CAMPO'=>'email','VALOR'=>''),
+																			8=>array( 'CAMPO'=>'emailalt','VALOR'=>''),
+																			9=>array( 'CAMPO'=>'codtipousuario','VALOR'=>''),
+																			10=>array( 'CAMPO'=>'codempresa','VALOR'=>'')
+																			),
+										       				'tablas'=>array('usuarios'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'id','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	),
+										'actdes'=>array('campos'=>array(
+																			0=>array( 'CAMPO'=>'estado','VALOR'=>''),
+																		),
+										       				'tablas'=>array('usuarios'),
+										    				'condicion'=>array(0=>array( 'CAMPO'=>'id','OPERADORR'=>'=','OPERADORL'=>'','VALOR'=>'')
+															   						),
+										        			'orden'=>''
+																	)
+					)
+                )
+?>

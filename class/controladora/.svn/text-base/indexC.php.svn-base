@@ -1,0 +1,201 @@
+<?php
+	/**
+	*nombreaplicacion indexC
+	*
+	*Clase Controladora de la pagina index.php
+	*Esta clase se encarga de controlar los eventos realizados en la pagina inndex.php.
+	*@copyright Instituo de Ingenieria CPDI
+	*@author Juan Carlos Rodriguez
+	*@version 1.0
+	*@package indexC
+	*
+	*/
+	class indexC 
+	{
+		/**
+		*
+		*Object que representa el modelo de la pagina index.php
+		*
+		*@global Object $model
+		*@name $model
+		*/
+		var $model="";
+		/**
+		*
+		*Object que representa la vista de la pagina index.php
+		*
+		*@global Object $view
+		*@name $view
+		*/
+		/**
+		*
+		*Object que representa la vista de la pagina index.php
+		*
+		*@global Object $view
+		*@name $view
+		*/
+		var $view="";
+		/**
+		*
+		*Object que representa el esqueleto de la pagina index.php
+		*
+		*@global Object $objPaginas
+		*@name $objPaginas
+		*/
+		var $objPaginas="";
+		/**
+		*
+		*Object que representa las variables de session que se captura en la aplicación.
+		*
+		*@global Object $objSesion
+		*@name $objSesion
+		*/
+		var $objSesion="";
+		/**
+		*
+		*Object 
+		*
+		*@global Object $usuario
+		*@name $usuario
+		*/
+		var $user="";
+		/**
+		*
+		*Constructor
+		*
+		*Esta Función asigna parametros a las variables miembros de la clase.
+		*También se encarga de ejecutar el hilo del proceso.
+		*Solo contiene el constructor por que es alli donde dependiendo del evento se sabe que se va a ejecutar.
+		*
+		*@param string $pagOrigen (Obligatorio) Es la pagina desde donde se esta llamando a la pagina info.php 
+		*@param array $varGlobals (Obligatorio) Es una array que contiene los parametros generales de la aplicación.
+		*@param array $varPag (Obligatorio) Son los todos los atributos correspondientes a la pagina.
+		*@return void
+		*/
+		function indexC($pagOrigen="",$objSesion="",$objError="",$varGlobal="",$varPag="")
+		{
+			$menusec = "";
+			$this->objSesion=$objSesion;
+			$nombre="index";
+			//Se crea el objeto  pagina
+			$this->objPaginas = new pagina($nombre,$this->objError);
+			$menusec=$this->objPaginas->getVar("nombre");
+			//Este es el caso de que se provenga de otra pagina diferente a index.php
+			//Se crea el objeto model 
+			$this->model= new indexM($this->objSesion);
+			//se crea el objeto  vista
+			$this->view=new indexV($this->objError);
+			//instanciamos el objeto de la clase xajax
+			$xajax = new xajax();
+			//registramos la función creada anteriormente al objeto xajax
+			//funciones del menu principal
+			$xajax->registerFunction(array("consultarLogin",&$this->model,"consultarLogin"));
+			$xajax->registerFunction(array("actualizar",&$this->model,"actualizar"));
+			$xajax->registerFunction(array("guardar",&$this->model,"guardar"));
+			$xajax->registerFunction(array("verdetalle",&$this->model,"verdetalle"));
+			$xajax->registerFunction(array("llenaMunParr",&$this->model,"llenaMunParr"));
+			$xajax->registerFunction(array("modificar",&$this->model,"modificar"));
+			$xajax->registerFunction(array("cambiaEstado",&$this->model,"cambiaEstado"));
+			$xajax->registerFunction(array("controladora",&$this,"controladora"));
+			$xajax->registerFunction(array("principal",&$this->view,"principal"));
+			//El objeto xajax tiene que procesar cualquier petición
+			$xajax->processRequests();
+			$this->objPaginas->setVar("javaScriptGeneral",$xajax->getJavascript("../librerias/xajax/"));
+			//actualiza la pagina donde se a ir en la siguiente pagina
+			$this->view->setPaginaSig($this->objPaginas->getVar("nombre"));
+			//se captura los que se va a imprimir en la pagina 
+			$this->objPaginas->setHTML($this->view->abrirPanelCentral($this->view->desplegarRegionEditable($this->view->login())));
+			$this->objPaginas->setCabecera($this->view->cabecera());
+			$this->objPaginas->setPie($this->view->pie());
+			$this->objPaginas->setContenido($this->objPaginas->setDivContenido($this->objPaginas->getHTML(),$this->view->divCont));
+			echo $this->model->pagina($this->objPaginas);
+		}
+		/**
+		*
+		*controladora
+		*
+		*Esta Función Controla todos los eventos de la aplicación.
+		*
+		*@param integer $fun (Obligatorio) Este paremetro es el evento que se va a ejecutar.
+		*@param integer $p1 (Obligatorio) Es un parametro depende del evento toma un valor.
+		*@param integer $p2 (Obligatorio) Es un parametro depende del evento toma un valor.
+		*@param integer $p3 (Obligatorio) Es un parametro depende del evento toma un valor.
+		*@return object $respuesta es la respuesta del ajax.
+		*/
+		function controladora($fun="",$p1="",$p2="",$p3="")
+		{
+			$respuesta = new xajaxResponse();
+			$this->model= new indexM($this->objSesion);
+			if($fun==1)//llama a la función actualizar
+			{
+				$respuesta=$this->model->actualizar($p1,$p2,$respuesta);
+				//print_r($respuesta);
+			}
+			elseif ($fun==2) //llama a la función guardar (cuando se guarda los datos  de la opcionr crear)
+			{
+				$respuesta=$this->model->guardar($p1,$p2,$respuesta);
+			}
+			elseif ($fun==3) //llama a la función modificar para realizar las modificaciones desde la pantala que se activa al pulsar la opcion modificar (desde gestionar)
+			{
+				$respuesta=$this->model->modificar($p1,$p2,$p3,$respuesta);
+			}
+			elseif ($fun==4) //llama a la función ver detalle para realizar las modificaciones o ver desalles desde la pantala que se activa al pulsar la opcion modificar (desde gestionar)
+			{
+				$xajax = new xajax();
+				$xajax->registerFunction(array("controladora",&$this,"controladora"));
+				$respuesta=$this->model->verdetalle($p1,$p2,$p3,$respuesta,$xajax);
+			}
+			elseif ($fun==5) //llama a la función ver detalle para realizar las modificaciones o ver desalles desde la pantala que se activa al pulsar la opcion modificar (desde gestionar)
+			{
+				$respuesta=$this->model->cambiaEstado($p1,$p2,$p3,$respuesta);
+			}
+			elseif($fun==6)//Actualiza el menu  para administración de usuraios
+			{
+				$this->view=new indexV();				
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['adminuser']));
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");		
+			}
+			elseif($fun==7)//Actualiza el menu  para Reportes
+			{
+				$this->view=new indexV();
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['reportes']));	
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");		
+			}
+			elseif($fun==8)//Actualiza el menu  para Mi perfil
+			{
+				$this->view=new indexV();		
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['miperfil']));		
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");	
+			}
+			elseif($fun==9)//Actualiza el menu  para Registros de jornadas
+			{
+				$this->view=new indexV();		
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['regisem']));		
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");	
+			}
+			elseif($fun==10)//Actualiza el menu  Control de  Registros de jornadas
+			{
+				$this->view=new indexV();			
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['control']));		
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");	
+			}
+			elseif($fun==11)//Actualiza el menu  inicio
+			{
+				$this->view=new indexV();			
+				$respuesta->addAssign("div_opcionesPrincipal","innerHTML",$this->view->opcionesAdmon($this->view->opcion['inicio']));		
+				$respuesta->addAssign("div_menuPrincipal","innerHTML",$this->view->menuPrincipal($fun));
+				$respuesta->addAssign("detalles_contenido","innerHTML","");	
+			}
+			elseif($fun==12)//Salir del sistema
+			{
+				//salir
+			}
+			return $respuesta;
+		}
+	}
+?>

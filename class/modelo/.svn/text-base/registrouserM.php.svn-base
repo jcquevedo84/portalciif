@@ -1,0 +1,248 @@
+<?php
+	/**
+	*nombreaplicacion registrouserM
+	*
+	*Clase Modelo de la Pagina index.php
+	*En esta clase se encuentran todos los modelos de datos y conexiones a base de datos realizadas desde la pagina info.php
+	*@copyright Personal
+	*@author Juan Carlos Rodriguez, Rosa Aguilar
+	*@version 1.0
+	*@package indexM
+	*
+	*/
+	class registrouserM 
+	{
+		/**
+		* string que guarda la dirección del servidor donde se encuentra la aplicación.
+		* @var string $direccionS
+		* @access public
+		*/
+		var $direccionS="";
+	    /**
+		* array que guarda las variables para conectarse a la base de datos.
+		* @var array $varGlobalBD
+		* @access public
+		*/
+		var $varGlobalBD="";
+	    /**
+		* string que guarda la dirección ip del servidor donde corre la aplicación.
+		* @var string $direccion
+		* @access public
+		*/
+		var $direccion="";
+		 /**
+		* string que guarda ruta dpnde se encuentran las consuktas predefinidas de base de datosn.
+		* @var string $rutaConsulta
+		* @access public
+		*/
+		var $rutaConsulta="";
+		/**
+		*
+		*Object que representa las variables de session que se captura en la aplicación.
+		*
+		*@global Object $objSesion
+		*@name $objSesion
+		*/
+		var $objS="";
+		/**
+		*
+		*array  que representa las variables de configuración de la aplicación.
+		*
+		*@global array $varGlobal
+		*@name $varGlobal
+		*/
+		var $varGlobal="";
+		/**
+		*
+		*array  que representa las variables de una pagina.
+		*
+		*@global array $varPag
+		*@name $varPag
+		*/
+		var $varPag=array();
+		/**
+		*
+		*Constructor
+		*
+		*Esta Función asigna parametros a las variables miembros de la clase.
+		*
+		*@param string $direccion (Obligatorio) Es la dirección IP donde se encuentra corriendo la aplicación.
+		*@param string $direccionS (Obligatorio) Es el URL completo de la aplicación sin inclui la pagina que esta correindo..
+		*@param array $varGlobalsBD (Obligatorio) Es un array que contiene toda la información necesaria para la conexion a la base de datos.
+		*@param string $rutaConsulta (Obligatorio) Es la ruta donde se encuentras las consultas predefinidas en la aplicación.
+		*@return void
+		*/
+		function empresaM($objError="",$objS="",$direccion="",$direccionS="",$varGlobalsBD="",$rutaConsulta="",$varGlobal="",$varPag="")
+		{
+			if(!empty($direccion))
+				$this->direccion=$direccion;
+			else 
+				$this->direccion=varConf::getServidor("direccionIP");
+			if(!empty($direccionS))
+				$this->direccionS=$direccionS;
+			else 
+				$this->direccionS=varConf::getServidor("direccionServidor");;
+			if(!empty($varGlobalsBD))
+				$this->varGlobalsBD=$varGlobalsBD;
+			else 
+				$this->varGlobalsBD=varConf::getBaseDatosPgsql();
+			if(!empty($rutaConsulta))
+				 $this->rutaConsulta=$rutaConsulta;
+			else 
+				$this->rutaConsulta=varConf::getRutasAccesoBDConsultas("consulta");
+			if(!empty($objS))
+				$this->objS=$objS;
+			if(!empty($varPag))
+				 $this->varPag=$varPag;
+			else 
+				$this->varPag=varConf::getAtributosPag(substr(__CLASS__,0,strlen(__CLASS__)-1));
+		}
+		/**
+		*
+		*gestionaevento
+		*
+		*Esta Función deside que evento se va a generar si el de crear o el de gestionar y se presenta en pantalla al usuario.
+		*
+		*@param integer $evento (Obligatorio) Controla si se va a crear registros o se va ha gestionar registro
+		*@param Object $objView (Obligatorio) Es el objeto que se encarga de llamar a los metodos de la vista index
+		*@return string $html (Obligatorio)Es el codigo HTML del evento que se va a realizar
+		*/
+		function gestionaevento($evento="",$objView="")
+		{
+			$html="";
+			if($evento==1)//Aqui se realiza los pasos para CREAR  Registros 
+			{
+				$resul="";
+				$objPG= new consultas(__FILE__,"indexM","empresa");
+				$resul=$objPG->selecion("",__LINE__);
+				$objPG->setNombreFuncion("tipousuario");
+				$objPG->setDatosconsultas();
+				$resul2=$objPG->selecion("",__LINE__);
+				unset($objPG);
+				$estado=$objView->llenarCombo("empresa",$resul['resul']);
+				$usuario=$objView->llenarCombo("tipouser",$resul2['resul']);
+				$html=$objView->crear($estado,$usuario);
+			}
+			elseif($evento==2)//Aqui se realiza los pasos para GESTIONAR  Registros 
+			{
+		        $campos=array(0=>array('id'=>'nombre','nombre'=>'Nombre','Ord'=>'1'),
+							  1=>array('id'=>'cedula','nombre'=>'Cédula','Ord'=>'1'),
+							  2=>array('id'=>'tipo','nombre'=>'Tipo Usuario','Ord'=>'0'),
+							  3=>array('id'=>'empresa','nombre'=>'Empresa','Ord'=>'0'),
+							  4=>array('id'=>'estado','nombre'=>'Estado','Ord'=>'0'),
+							  5=>array('id'=>'accion','nombre'=>'Acción','Ord'=>'0')
+							 );
+				 $action=array(0=>array('nomImg'=>'modificar15x15.png','eventoJs'=>"onclick=\"xajax_controladora('10','0');\"",'alt'=>'Ver'),
+			  				   1=>array('nomImg'=>'deshabilitar.png','eventoJs'=>"onclick=\"if(confirm('Deseas Desactivar un Operador')){xajax_controladora('10','f')};\"",'alt'=>'deshabilitar'),
+			  				   2=>array('nomImg'=>'habilitar.png','eventoJs'=>"onclick=\"xajax_controladora('10','t');\"",'alt'=>'habilitar'),
+			  				   3=>array('nomImg'=>'modificar15x15.png','eventoJs'=>"onclick=\"xajax_controladora('10','1');\"",'alt'=>'modificar')
+			  				 );
+				$objPG= new consultas("",__CLASS__,"listar");
+				$resul=$objPG->selecion("",__LINE__);
+				unset($objPG);
+				if(!empty($resul))
+					$html=$objView->gestionar($campos,$resul['resul'],$action);
+				else 
+					$html="No se encontraron registros";
+			}
+			return $html;
+		}
+		/**
+		*
+		*guardar
+		*
+		*Este metodo inserta los datos de un registro a la BD
+		*		
+		*@param integer $form (Obligatorio) Son los datos del registro que se INSERTARÁ
+		*@return String Mensaje de que se realizó la operación
+		*/
+		function guardar($form="")
+		{		   
+			$resulQuery="";
+    		$objPG= new consultas(__FILE__,__CLASS__,__FUNCTION__);
+	    	$resulQuery=$objPG->insercion("0,".$form["txtusuario"].";1,".$form["txtpassword"].";2,".$form["txtnombre_solicitante"].";3,".$form["txtdocumentoid_solicitante"].";4,".$form["txtcargo_solicitante"].";5,".$form["txttelefono_solicitante"].";6,".$form["txttelefonoalt_solicitante"].";7,".$form["txtemail_solicitante"].";8,".$form["txtemailalt_solicitante"].";9,".$form["cmbtipouser"].";10,".$form["cmbempresa"].";",__LINE__);
+			unset($objPG);
+			return "El Usuraio se ha  Registrado con exito";
+		}
+		/**
+		*
+		*modificar
+		*
+		*Este metodo Modifica los datos de un registro 
+		*
+		*@param integer $id (Obligatorio)Es el identificador para realizar la consulta a la BD y buscar el registro
+		*@param integer $form (Obligatorio) Son los datos del registro que se modificaran
+		*@return String Mensaje de que se realizó la operación
+		*/
+		function modificar($form="",$id="")
+		{		   
+    		$resulQuery="";
+    		$objPG= new consultas(__FILE__,__CLASS__,__FUNCTION__);
+	    	$resulQuery=$objPG->actualizacion("0,".$form["txtempresa"].";1,".$form["cmbestado"].";2,".$form["cmbmunicipio"].";3,".$form["cmbparroquia"].";4,".$form["txtdireccion"].";","0,".$id.";",__LINE__);
+			unset($objPG);
+			return "La empresa se ha actualizado con exito";
+		}
+		/**
+		*
+		*verdetalle
+		*
+		*Esta Función visualiza en una nueva ventana los datos de del registro seleccionado.
+		*
+		*@param integer $evento (Obligatorio) Controla si se va a modificar unos datos o solo a visualizar (Si se bloquean o no los datos)
+		*@param integer $id (Obligatorio) Contiene la variable unica del registro que se va a visualizar o modificar.
+		*@param Object $view (Obligatorio) Es el encargado de gestionar el xajax
+		*@param Object $objm (Obligatorio) Es el obejto  xajax para registra las funcion controladora.
+		*@return Object $respuesta (Obligatorio) Es el gestionador el xajax (con los cambios realizados)
+		*/
+		function detalle($evento="",$id="",$objView="",$objm="")
+		{
+			$dato=$this->seleccionar($id);
+			$resul="";
+			$objPG= new consultas(__FILE__,"indexM","empresa");
+			$resul=$objPG->selecion("",__LINE__);
+			$objPG->setNombreFuncion("tipousuario");
+			$objPG->setDatosconsultas();
+			$resul2=$objPG->selecion("",__LINE__);
+			unset($objPG);
+			$estado=$objView->llenarCombo("empresa",$resul['resul'],"",$dato[1][12],$evento);
+			$usuario=$objView->llenarCombo("tipouser",$resul2['resul'],"",$dato[1][11],$evento);
+			$html=$objView->crear($estado,$usuario,$dato,$evento,$id);
+			return $html;
+		}
+		/**
+		*
+		*actdes
+		*
+		*Este metodo actualiza el estado de un registro a activo=1 o inactivo =0.
+		*
+		*@param integer $id (Obligatorio)Es el identificador para realizar la consulta a la BD y buscar el registro
+		*@param integer $est (Obligatorio) es estado en que cambiara el registro a activo=1 o inactivo =0.
+		*@return String Mensaje de que se realizó la operación
+		*/
+		function actdes($id="",$est="")
+		{
+			$resulQuery="";
+    		$objPG= new consultas(__FILE__,__CLASS__,__FUNCTION__);
+	    	$resulQuery=$objPG->actualizacion("0,".$est.";","0,".$id.";",__LINE__);
+			unset($objPG);
+			return "La empresa  ha cambiado de estado";
+		}
+		/**
+		*
+		*seleccionar
+		*
+		*Selecciona un registro deacuerdo a un ID y devuelve los datos del registro
+		*
+		*@param integer $id (Obligatorio)Es el identificador para realizar la consulta a la BD y buscar el registro
+		*@return array $resul datos del registro
+		*/
+		function seleccionar($id="")
+		{
+			$resul="";
+			$objPG= new consultas(__FILE__,__CLASS__,__FUNCTION__);
+			$resul=$objPG->selecion("0,".$id.";",__LINE__);
+			unset($objPG);
+			return 	$resul['resul'];
+		}
+	}
+?>
